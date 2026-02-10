@@ -27,7 +27,7 @@ namespace SailClubLibrary.Services
         public BoatRepository()
         {
             //_boats = [];
-            _boats = MockData.BoatData;
+            _boats = new MockData().BoatData;
         }
         #endregion
 
@@ -108,7 +108,16 @@ namespace SailClubLibrary.Services
 
         public List<Boat> FilterBoats(string filterCriteria)
         {
-            throw new NotImplementedException();
+            List<Boat> bList = [];
+            foreach(Boat b in _boats.Values)
+            {
+                //if (b.Model.StartsWith(filterCriteria))
+                if (b.Model.Contains(filterCriteria))
+                {
+                    bList.Add(b);
+                }
+            }
+            return bList;
         }
         #endregion
     }

@@ -1,0 +1,47 @@
+﻿@page
+@using SailClubLibrary.Models
+@model RazorBoatApp2026InClass.Pages.NewFolder.IndexModel
+@{
+    ViewData["Title"] = "List boats";
+}
+
+<h1>List of boats</h1>
+
+<p>
+    <a asp-page="CreateBoat">Create a new boat</a>
+</p>
+
+
+<form method="get">
+    search:<input type="text" asp-for="@Model.FilterCriteria"/>
+    <input type="submit" value="Filter" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>BoatType</th>
+            <th>Model</th>
+            <th>SailNumber</th>
+            <th>YearOfConstruction</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Boat item in Model.Boats)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.TheBoatType</td>
+                <td>@item.Model</td>
+                <td>@item.SailNumber</td>
+                <td>@item.YearOfConstruction</td>
+                <td><a asp-page="DeleteBoat" asp-route-sailNumber="@item.SailNumber">Delete</a> |
+                <a asp-page="EditBoat" asp-route-sailNumber="@item.SailNumber">Edit</a></td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

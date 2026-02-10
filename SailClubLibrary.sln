@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SailClubLibrary", "SailClubLibrary\SailClubLibrary.csproj", "{3EACC128-01C9-4A74-871A-3DB8C4B4F7A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorBoatApp2026InClass", "RazorBoatApp2026InClass\RazorBoatApp2026InClass.csproj", "{51568E87-9C3E-4F3A-8CDD-91659AE5527A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBoatApp2026", "TestBoatApp2026\TestBoatApp2026.csproj", "{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3EACC128-01C9-4A74-871A-3DB8C4B4F7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EACC128-01C9-4A74-871A-3DB8C4B4F7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EACC128-01C9-4A74-871A-3DB8C4B4F7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51568E87-9C3E-4F3A-8CDD-91659AE5527A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51568E87-9C3E-4F3A-8CDD-91659AE5527A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51568E87-9C3E-4F3A-8CDD-91659AE5527A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51568E87-9C3E-4F3A-8CDD-91659AE5527A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
