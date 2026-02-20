@@ -38,6 +38,8 @@
                 <td>@item.Mail</td>
                 <td>@item.TheMemberType</td>
                 <td>@item.TheMemberRole</td>
+                <td><a asp-page="DeleteMember" asp-route-phoneNumber="@item.PhoneNumber">Delete</a> |
+                <a asp-page="EditMember" asp-route-phoneNumber="@item.PhoneNumber">Edit</a></td>
             </tr>
         }
     </tbody>
