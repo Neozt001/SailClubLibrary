@@ -37,7 +37,7 @@ namespace RazorBoatApp2026InClass.Pages.Boats
                 ViewData["ErrorMessage"] = ex.Message;
                 return Page();
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 ViewData["ErrorMessage"] = exp.Message;
                 return Page();
