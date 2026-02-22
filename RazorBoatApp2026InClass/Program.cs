@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IBoatRepository, BoatRepository>();
 builder.Services.AddSingleton<IMemberRepository, MemberRepository>();
+builder.Services.AddSingleton<IBookingRepository, BookingRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

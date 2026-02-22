@@ -1,0 +1,41 @@
+﻿@page
+@model RazorBoatApp2026InClass.Pages.Bookings.CreateBookingModel
+@{
+    ViewData["Title"] = "Create a booking";
+}
+
+<h1>Create Booking</h1>
+
+<p>Boat id : @Model.ChosenBoat.Id </p>
+<p>Boat sailnumber : @Model.ChosenBoat.SailNumber </p>
+<p>Boat model : @Model.ChosenBoat.Model </p>
+<p>Boat year of construction : @Model.ChosenBoat.YearOfConstruction </p>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="@Model.TheBooking.Id" class="control-label"></label>
+        <input asp-for="@Model.TheBooking.Id" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.TheBooking.Destination" class="control-label"></label>
+        <input asp-for="@Model.TheBooking.Destination" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.PhoneNumber" class="control-label"></label>
+        <input asp-for="@Model.PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.StartDate" class="control-label"></label>
+        <input asp-for="@Model.StartDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EndDate" class="control-label"></label>
+        <input asp-for="@Model.EndDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create booking" class="btn btn-primary" />
+    </div>
+
+
+</form>

@@ -1,0 +1,39 @@
+﻿@page
+@using SailClubLibrary.Models
+@model RazorBoatApp2026InClass.Pages.Bookings.IndexModel
+@{
+    ViewData["Title"] = "List bookings";
+}
+
+<h1>List of bookings</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <form method="get">
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>SailNumber</th>
+                <th>Destination</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+
+            </form>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Booking item in Model.Bookings)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.TheMember.FirstName</td>
+                <td>@item.TheBoat.SailNumber</td>
+                <td>@item.Destination</td>
+                <td>@item.StartDate</td>
+                <td>@item.EndDate</td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
