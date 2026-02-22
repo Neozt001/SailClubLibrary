@@ -11,18 +11,36 @@
     <a asp-page="CreateMember">Create a new member</a>
 </p>
 
+<form method="get">
+    search:<input type="text" asp-for="@Model.FilterCriteria" />
+    <input type="submit" value="Filter" />
+</form>
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>FirstName</th>
-            <th>SurName</th>
-            <th>PhoneNumber</th>
-            <th>Address</th>
-            <th>City</th>
-            <th>Mail</th>
-            <th>TheMemberType</th>
-            <th>TheMemberRole</th>
+            <form method="get">
+                @* <th>ID</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="ID">ID</button>
+                </th>
+                @* <th>FirstName</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="FirstName">FirstName</button>
+                </th>
+                <th>SurName</th>
+                @* <th>PhoneNumber</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="PhoneNumber">PhoneNumber</button>
+                </th>
+                <th>Address</th>
+                @* <th>City</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="City">City</button>
+                </th>
+                <th>Mail</th>
+                <th>TheMemberType</th>
+                <th>TheMemberRole</th>
+            </form>
         </tr>
     </thead>
     <tbody>

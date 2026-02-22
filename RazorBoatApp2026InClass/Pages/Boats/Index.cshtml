@@ -19,13 +19,24 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>BoatType</th>
-            <th>Model</th>
-            <th>SailNumber</th>
-            <th>YearOfConstruction</th>
-            <th></th>
-            <th></th>
+            <form method="get">
+                @* <th>ID</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="ID">ID</button>
+                </th>
+                <th>BoatType</th>
+                <th>Model</th>
+                @* <th>SailNumber</th> *@
+                <th>
+                    <button type="submit" class="btn btn-link" name="SortBy" Value="SailNumber">SailNumber</button>
+                </th>
+                @* <th>YearOfConstruction</th> *@
+                <th>
+                <button type="submit" class="btn btn-link" name="SortBy" Value="YearOfConstruction">YearOfConstruction</button>
+                </th>
+                <th></th>
+                <th></th>
+            </form>
         </tr>
     </thead>
     <tbody>

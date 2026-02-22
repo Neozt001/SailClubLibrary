@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SailClubLibrary.Models
 {
-    public class Member
+    public class Member : IComparable<Member>
     {
         #region Instance Fields
         #endregion
@@ -57,6 +57,18 @@ namespace SailClubLibrary.Models
                 $"Adresse: {Address}\nBy: {City}\nEmail: {Mail}\nType: {TheMemberType}\n" +
                 $"Rolle: {TheMemberRole}";
         }
-        #endregion 
+
+        public int CompareTo(Member? other)
+        {
+            if (other == null) return 1;
+
+            if (Id < other.Id) return -1;
+            if (Id > other.Id) return 1;
+            //if (Id > other.Id) return -1;
+            //if (Id < other.Id) return 1;
+
+            return 0;
+        }
+        #endregion
     }
 }
