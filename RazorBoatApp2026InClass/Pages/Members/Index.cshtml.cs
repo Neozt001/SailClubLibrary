@@ -14,9 +14,12 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public List<Member> Members { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SortBy { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public string FilterCriteria { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string FilterBy { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public MemberType SelectedMemberType { get; set; }
 
         public IndexModel(IMemberRepository memberRepository)
         {
