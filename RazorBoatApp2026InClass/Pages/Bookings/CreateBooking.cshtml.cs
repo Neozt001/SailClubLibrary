@@ -13,6 +13,8 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
         [BindProperty]
         public Booking TheBooking { get; set; }
         [BindProperty]
+        public string SailNumber { get; set; }
+        [BindProperty]
         public Boat ChosenBoat { get; set; }
         //public Member TheMember { get; set; }
         [BindProperty]
@@ -28,6 +30,9 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
             _bRepo = bRepo;
             _mRepo = mRepo;
         }
+        //public void OnGet()
+        //{
+        //}
         public void OnGet(string sailNumber)
         {
             ChosenBoat = _bRepo.SearchBoat(sailNumber);
@@ -35,8 +40,9 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
 
         public IActionResult OnPost()
         {
+
             TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
-            TheBooking.TheBoat = ChosenBoat;
+            TheBooking.TheBoat = _bRepo.SearchBoat(SailNumber);
             TheBooking.StartDate = StartDate;
             TheBooking.EndDate = EndDate;
             _repo.AddBooking(TheBooking);

@@ -129,7 +129,35 @@ namespace SailClubLibrary.Services
 
         public List<Member> FilterMembers(string filterCriteria)
         {
-            throw new NotImplementedException();
+            List<Member> mList = [];
+            foreach(Member m in _members.Values)
+            {
+                if (m.FirstName.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+                if (m.SurName.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+                if (m.PhoneNumber.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+                if (m.Address.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+                if (m.City.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+                if (m.Mail.Contains(filterCriteria))
+                {
+                    mList.Add(m);
+                }
+            }
+            return mList;
         }
         #endregion
     }

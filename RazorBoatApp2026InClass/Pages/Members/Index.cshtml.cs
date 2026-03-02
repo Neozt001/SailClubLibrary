@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SailClubLibrary.Filter;
 using SailClubLibrary.Helpers.Sorting;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
@@ -32,17 +33,56 @@ namespace RazorBoatApp2026InClass.Pages.Members
         //}
         public void OnGet()
         {
-            if (!string.IsNullOrEmpty(FilterCriteria))
+            Members = _repo.GetAllMembers();
+            List<Predicate<Member>> pList = [];
+            if (!string.IsNullOrEmpty(FilterBy))
             {
-                Members = _repo.FilterMembers(FilterCriteria);
-            }
-            else
-                Members = _repo.GetAllMembers();
-            if (!string.IsNullOrEmpty(SortBy))
-            {
-                SortMembers();
+                if (FilterBy == "FirstName")
+                {
+                    pList.Add(m => m.FirstName != null && m.FirstName.Contains(FilterCriteria));
+                }
+                if (FilterBy == "SurName")
+                {
+                    pList.Add(m => m.SurName != null && m.SurName.Contains(FilterCriteria));
+                }
+                if (FilterBy == "PhoneNumber")
+                {
+                    pList.Add(m => m.PhoneNumber != null && m.PhoneNumber.Contains(FilterCriteria));
+                }
+                if (FilterBy == "Address")
+                {
+                    pList.Add(m => m.Address != null && m.Address.Contains(FilterCriteria));
+                }
+                if (FilterBy == "City")
+                {
+                    pList.Add(m => m.City != null && m.City.Contains(FilterCriteria));
+                }
+                if (FilterBy == "Mail")
+                {
+                    pList.Add(m => m.Mail != null && m.Mail.Contains(FilterCriteria));
+                }
+
+                FilterFunctions filterFunctions = new FilterFunctions();
+                Members = filterFunctions.FilterList(Members, pList);
+                if (!string.IsNullOrEmpty(SortBy))
+                {
+                    SortMembers();
+                }
             }
         }
+        //public void OnGet()
+        //{
+        //    if (!string.IsNullOrEmpty(FilterCriteria))
+        //    {
+        //        Members = _repo.FilterMembers(FilterCriteria);
+        //    }
+        //    else
+        //        Members = _repo.GetAllMembers();
+        //    if (!string.IsNullOrEmpty(SortBy))
+        //    {
+        //        SortMembers();
+        //    }
+        //}
         private void SortMembers()
         {
             if (SortBy == "ID")

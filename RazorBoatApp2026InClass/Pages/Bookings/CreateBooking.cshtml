@@ -12,6 +12,7 @@
 <p>Boat year of construction : @Model.ChosenBoat.YearOfConstruction </p>
 
 <form method="post">
+    <input type="hidden" asp-for="ChosenBoat.SailNumber" />
     <div class="form-group">
         <label asp-for="@Model.TheBooking.Id" class="control-label"></label>
         <input asp-for="@Model.TheBooking.Id" class="form-control" />
