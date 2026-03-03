@@ -35,40 +35,44 @@ namespace RazorBoatApp2026InClass.Pages.Members
         {
             Members = _repo.GetAllMembers();
             List<Predicate<Member>> pList = [];
-            if (!string.IsNullOrEmpty(FilterBy))
+            if (!string.IsNullOrEmpty(FilterBy) && !string.IsNullOrEmpty(FilterCriteria))
             {
                 if (FilterBy == "FirstName")
                 {
                     pList.Add(m => m.FirstName != null && m.FirstName.Contains(FilterCriteria));
                 }
-                if (FilterBy == "SurName")
+                else if (FilterBy == "SurName")
                 {
                     pList.Add(m => m.SurName != null && m.SurName.Contains(FilterCriteria));
                 }
-                if (FilterBy == "PhoneNumber")
+                else if (FilterBy == "PhoneNumber")
                 {
                     pList.Add(m => m.PhoneNumber != null && m.PhoneNumber.Contains(FilterCriteria));
                 }
-                if (FilterBy == "Address")
+                else if (FilterBy == "Address")
                 {
                     pList.Add(m => m.Address != null && m.Address.Contains(FilterCriteria));
                 }
-                if (FilterBy == "City")
+                else if (FilterBy == "City")
                 {
                     pList.Add(m => m.City != null && m.City.Contains(FilterCriteria));
                 }
-                if (FilterBy == "Mail")
+                else if (FilterBy == "Mail")
                 {
                     pList.Add(m => m.Mail != null && m.Mail.Contains(FilterCriteria));
                 }
-
-                FilterFunctions filterFunctions = new FilterFunctions();
-                Members = filterFunctions.FilterList(Members, pList);
-                if (!string.IsNullOrEmpty(SortBy))
-                {
-                    SortMembers();
-                }
             }
+            if (SelectedMemberType != 0)
+            {
+                pList.Add(m => m.TheMemberType == SelectedMemberType);
+            }
+            FilterFunctions filterFunctions = new FilterFunctions();
+            Members = filterFunctions.FilterList(Members, pList);
+            if (!string.IsNullOrEmpty(SortBy))
+            {
+                SortMembers();
+            }
+            
         }
         //public void OnGet()
         //{
