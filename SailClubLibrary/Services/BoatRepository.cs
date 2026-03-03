@@ -111,7 +111,6 @@ namespace SailClubLibrary.Services
             List<Boat> bList = [];
             foreach(Boat b in _boats.Values)
             {
-                //if (b.Model.StartsWith(filterCriteria))
                 if (b.Model.Contains(filterCriteria))
                 {
                     bList.Add(b);

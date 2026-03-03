@@ -20,11 +20,6 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public void OnGet()
         {
         }
-        //public IActionResult OnPost()
-        //{
-        //    _repo.AddMember(NewMember);
-        //    return RedirectToPage("index");
-        //}
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)

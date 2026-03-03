@@ -26,11 +26,6 @@ namespace RazorBoatApp2026InClass.Pages.Members
         {
             _repo = memberRepository;
         }
-
-        //public void OnGet()
-        //{
-        //    Members = _repo.GetAllMembers();
-        //}
         public void OnGet()
         {
             Members = _repo.GetAllMembers();
@@ -74,19 +69,6 @@ namespace RazorBoatApp2026InClass.Pages.Members
             }
             
         }
-        //public void OnGet()
-        //{
-        //    if (!string.IsNullOrEmpty(FilterCriteria))
-        //    {
-        //        Members = _repo.FilterMembers(FilterCriteria);
-        //    }
-        //    else
-        //        Members = _repo.GetAllMembers();
-        //    if (!string.IsNullOrEmpty(SortBy))
-        //    {
-        //        SortMembers();
-        //    }
-        //}
         private void SortMembers()
         {
             if (SortBy == "ID")
