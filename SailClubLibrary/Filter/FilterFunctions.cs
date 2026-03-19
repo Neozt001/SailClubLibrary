@@ -13,7 +13,7 @@ namespace SailClubLibrary.Filter
             List<T> resList = mList;
             foreach(Predicate<T> p in pList)
             {
-                resList = resList.Where(x => p(x)).ToList();
+                resList = resList.FindAll(p);
             }
             return resList;
         }
