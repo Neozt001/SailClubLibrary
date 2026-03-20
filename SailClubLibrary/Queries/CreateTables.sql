@@ -1,7 +1,13 @@
-﻿--CREATE DATABASE SailClubDatabase 
+﻿--DROP DATABASE IF EXISTS SailClubDatabase
+--CREATE DATABASE SailClubDatabase 
+USE SailClubDatabase;
+GO
 
+--DROP TABLE IF EXISTS Boats;
+--DROP TABLE IF EXISTS Members;
+--DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Boats(
-	Boat_Id int NOT NULL,
+	Boat_Id int UNIQUE NOT NULL,
 	Boat_SailNumber nvarchar(7) NOT NULL PRIMARY KEY,
 	Boat_Model int NOT NULL,
 	Boat_Draft int NOT NULL,
@@ -9,26 +15,28 @@ CREATE TABLE Boats(
 	Boat_Length int NOT NULL,
 	Boat_YearOfConstruction int NOT NULL,
 	Boat_EngineInfo nvarchar(50),
-	Boat_TheBoatType_Id int
+	Boat_TheBoatType int
 	);
 
 CREATE TABLE Members(
-	Member_Id int,
-	Member_FirstName nvarchar(20),
-	Member_SurName nvarchar(20),
+	Member_Id int UNIQUE NOT NULL,
+	Member_FirstName nvarchar(20) NOT NULL,
+	Member_SurName nvarchar(20) NOT NULL,
 	Member_PhoneNumber nvarchar(8) PRIMARY KEY,
-	Member_Address nvarchar(30),
-	Member_City nvarchar(20),
-	Member_Mail nvarchar(30),
-	Member_TheMemberType_Id int,
-	Member_TheMemberRole_Id int,
+	Member_Address nvarchar(30) NOT NULL,
+	Member_City nvarchar(20) NOT NULL,
+	Member_Mail nvarchar(30) NOT NULL,
+	Member_TheMemberType int NOT NULL,
+	Member_TheMemberRole int NOT NULL,
 	);
 
 CREATE TABLE Bookings(
-	Booking_Id int,
-	Booking_StartDate date,
-	Booking_EndDate date,
-	Booking_Destionation nvarchar(20),
-	Booking_Member_PhoneNumber nvarchar(8),
-	Booking_Boat_SailNumber nvarchar(7),
+	Booking_Id int PRIMARY KEY,
+	Booking_StartDate date NOT NULL,
+	Booking_EndDate date NOT NULL,
+	Booking_Destionation nvarchar(20) NOT NULL,
+	Booking_PhoneNumber nvarchar(8) NOT NULL,
+	Booking_SailNumber nvarchar(7) NOT NULL,
+	FOREIGN KEY (Booking_PhoneNumber) REFERENCES Members (Member_PhoneNumber),
+	FOREIGN KEY (Booking_SailNumber) REFERENCES Boats (Boat_SailNumber),
 	);

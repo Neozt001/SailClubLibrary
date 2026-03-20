@@ -7,26 +7,16 @@ using System.Threading.Tasks;
 
 namespace SailClubLibrary.Interfaces
 {
-    public interface IMemberRepository
+    public interface IMemberRepositoryAsync
     {
-        int Count { get; }
+        //Task<int> Count { get; }
+        Task<int> Count();
         Task AddMember(Member member);
         Task RemoveMember(Member member);
         Task UpdateMember(Member member);
         Task<List<Member>> GetAllMembers();
-        void PrintAll();
+        Task PrintAll();
         Task<Member?> SearchMember(string phoneNumber);
         Task<List<Member>> FilterMembers(string filterCriteria);
     }
-    //public interface IMemberRepository
-    //{
-    //    int Count { get; }
-    //    void AddMember(Member member);
-    //    void RemoveMember(Member member);
-    //    void UpdateMember(Member member);
-    //    List<Member> GetAllMembers();
-    //    void PrintAll();
-    //    Member? SearchMember(string phoneNumber);
-    //    List<Member> FilterMembers(string filterCriteria);
-    //}
 }

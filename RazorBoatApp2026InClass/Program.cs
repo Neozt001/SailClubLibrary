@@ -1,4 +1,5 @@
 using SailClubLibrary.Interfaces;
+using SailClubLibrary.Models;
 using SailClubLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,3 +33,4 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+

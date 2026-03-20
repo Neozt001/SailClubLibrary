@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorBoatApp2026InClass", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBoatApp2026", "TestBoatApp2026\TestBoatApp2026.csproj", "{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{364A3F90-8AF1-4738-ACD0-BB451ECBE941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFFF8174-533B-4EDA-92EC-B392C01EFBC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{364A3F90-8AF1-4738-ACD0-BB451ECBE941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{364A3F90-8AF1-4738-ACD0-BB451ECBE941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{364A3F90-8AF1-4738-ACD0-BB451ECBE941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{364A3F90-8AF1-4738-ACD0-BB451ECBE941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
