@@ -9,14 +9,14 @@ namespace SailClubLibrary.Interfaces
 {
     public interface IMemberRepository
     {
-        Task<int> Count { get; }
-        Task AddMember(Member member);
-        Task RemoveMember(Member member);
-        Task UpdateMember(Member member);
-        Task<List<Member>> GetAllMembers();
+        int Count { get; }
+        void AddMember(Member member);
+        void RemoveMember(Member member);
+        void UpdateMember(Member member);
+        List<Member> GetAllMembers();
         void PrintAll();
-        Task<Member?> SearchMember(string phoneNumber);
-        Task<List<Member>> FilterMembers(string filterCriteria);
+        Member? SearchMember(string phoneNumber);
+        List<Member> FilterMembers(string filterCriteria);
     }
     //public interface IMemberRepository
     //{
