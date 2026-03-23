@@ -23,6 +23,7 @@ namespace SailClubLibrary.Services
         private string _queryCount = "COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
         private string _insertSql = "Insert INTO Members Values(@ID, @FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole)";
+        private string _queryDelete = "DELETE FROM Members WHERE Member_PhoneNumber = @PhoneNumber";
 
         //int IMemberRepository.Count => throw new NotImplementedException();
         public Task<int> Count { get { return GetCount(); } }
@@ -217,9 +218,35 @@ namespace SailClubLibrary.Services
         /// <summary>
         /// Method for removing a member from the dictionary, using their phone number
         /// </summary>
-        public void RemoveMember(Member member)
+        public async void RemoveMember(Member member)
         {
-            _members.Remove(member.PhoneNumber);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    //Member memberToBeDel = await SearchMember(member.PhoneNumber);
+                    //if(memberToBeDel == null)
+                    //{
+                    //    return;
+                    //}
+                    SqlCommand command = new SqlCommand(_queryDelete, connection);
+                    await command.Connection.OpenAsync();
+                    command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+                    int numberOfRows = await command.ExecuteNonQueryAsync();
+                }
+                catch (SqlException sqlExp)
+                {
+                    Console.WriteLine("Database error" + sqlExp.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel fejl: " + ex.Message);
+                }
+                finally
+                {
+
+                }
+            }
         }
         // Formål:
         // Opdatere Medlem
