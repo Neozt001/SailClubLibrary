@@ -16,7 +16,7 @@ namespace SailClubLibrary.Services
     /// <summary>
     /// Class for Constructing and calling Member Repository Objects using the interface
     /// </summary>
-    public class MemberRepository : Connection, IMemberRepository
+    public class MemberRepositoryAsync : Connection, IMemberRepository
     {
         #region Instance Fields
         private Dictionary<string, Member> _members;
@@ -285,7 +285,7 @@ namespace SailClubLibrary.Services
         public List<Member> FilterMembers(string filterCriteria)
         {
             List<Member> mList = [];
-            foreach(Member m in _members.Values)
+            foreach (Member m in _members.Values)
             {
                 if (m.FirstName.Contains(filterCriteria))
                 {

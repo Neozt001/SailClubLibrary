@@ -17,6 +17,7 @@ public static class MainMenu
         Console.WriteLine("\t1)\t List Members asynkront");
         Console.WriteLine("\t2)\t Tilføj et Member asynkront");
         Console.WriteLine("\t3)\t Find et Member asynkront");
+        Console.WriteLine("\t4)\t Count");
         Console.WriteLine("\tQ)\t Afslut");
         Console.Write("\tIndtast valg: ");
     }
