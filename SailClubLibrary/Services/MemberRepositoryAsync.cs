@@ -16,7 +16,7 @@ namespace SailClubLibrary.Services
     /// <summary>
     /// Class for Constructing and calling Member Repository Objects using the interface
     /// </summary>
-    public class MemberRepositoryAsync : Connection, IMemberRepository
+    public class MemberRepositoryAsync : Connection, IMemberRepositoryAsync
     {
         #region Instance Fields
         private Dictionary<string, Member> _members;
@@ -39,7 +39,7 @@ namespace SailClubLibrary.Services
         /// <summary>
         /// MemberRepository constructor used for making a new member repository called _members with string as key and IMember as value
         /// </summary>
-        public MemberRepository()
+        public MemberRepositoryAsync()
         {
             //_members = new Dictionary<string, Member>();
             //_members = new MockData().MemberData;
