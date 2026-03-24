@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using SailClubLibrary.Models;
+using SailClubLibrary.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SailClubLibrary.Models;
-using SailClubLibrary.Services;
 
 public static class MainMenu
 {
@@ -42,6 +43,10 @@ public static class MainMenu
                 GetMemberByIdAsync();
                 DoSomething();
                 return true;
+            case "4":
+                ShowCountAsync();
+                DoSomething();
+                return true;
             case "Q":
             case "q": return false;
             default: return true;
@@ -53,7 +58,7 @@ public static class MainMenu
         Console.Clear();
         Console.WriteLine("Indlæs Telefon Nr.");
         string phoneNumber = Console.ReadLine();
-        MemberRepository mRepo = new MemberRepository();
+        MemberRepositoryAsync mRepo = new MemberRepositoryAsync();
         Member foundMember = await mRepo.SearchMember(phoneNumber);
         if (foundMember != null)
         {
@@ -69,13 +74,66 @@ public static class MainMenu
     {
         Console.Clear();
         List<Member> members = [];
-        MemberRepository mRepo = new MemberRepository();
+        MemberRepositoryAsync mRepo = new MemberRepositoryAsync();
         members = await mRepo.GetAllMembers();
         foreach (Member member in members)
         {
             Console.WriteLine(member + "\n");
         }
         Console.ReadKey();
+    }
+
+    private async static Task ShowCountAsync()
+    {
+        Console.Clear();
+        MemberRepositoryAsync mRepo = new MemberRepositoryAsync();
+        Console.WriteLine("Count for members is: " + await mRepo.Count);
+        Console.ReadKey();
+    }
+    private async static Task UpdateMemberAsync()
+    {
+        //Console.Clear();
+        //Console.WriteLine("Indlæs tlf");
+        ////int memberPhoneNumber = Convert.ToInt32(Console.ReadLine());
+        //string memberPhoneNumber = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        //Console.WriteLine("Indlæs by");
+        //string city = Console.ReadLine();
+        ////Console.WriteLine("Indlæs ny hotel adresse");
+        ////string adresse = Console.ReadLine();
+
+        //MemberRepositoryAsync ms = new MemberRepositoryAsync();
+        //Member foundMember = await ms.SearchMember(memberPhoneNumber);
+        //if (foundMember == null)
+        //{
+        //    Console.WriteLine("Member findes ikke");
+        //}
+        //else
+        //{
+        //    foundMember.FirstName =  ;
+        //    foundMember.City = adresse;
+        //    bool ok = await hs.UpdateHotelAsync(foundHotel, hotelnr);
+        //    if (ok)
+        //    {
+        //        Console.WriteLine("Hotellet blev opdateret!");
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Fejl. Hotellet blev ikke opdateret!");
+        //    }
+        //}
+        //Console.ReadKey();
     }
 
     private async static Task CreateMemberAsync()
@@ -103,7 +161,7 @@ public static class MainMenu
 
         //Kald hotelservice og vis resultatet
         //HotelServiceAsync hs = new HotelServiceAsync();
-        MemberRepository mRepo = new MemberRepository();
+        MemberRepositoryAsync mRepo = new MemberRepositoryAsync();
         await mRepo.AddMember(new Member(memberID, firstName, surName, phoneNumber, address, city, mail, theMemberType, theMemberRole));
         Member memberToAdd = await mRepo.SearchMember(phoneNumber);
         bool ok = memberToAdd != null;

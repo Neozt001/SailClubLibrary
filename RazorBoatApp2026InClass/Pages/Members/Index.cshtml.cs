@@ -5,12 +5,13 @@ using SailClubLibrary.Helpers.Sorting;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 using System.Globalization;
+using System.Reflection;
 
 namespace RazorBoatApp2026InClass.Pages.Members
 {
     public class IndexModel : PageModel
     {
-        private IMemberRepository _repo;
+        private IMemberRepositoryAsync _repo;
 
         public List<Member> Members { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -22,13 +23,22 @@ namespace RazorBoatApp2026InClass.Pages.Members
         [BindProperty(SupportsGet = true)]
         public MemberType SelectedMemberType { get; set; }
 
-        public IndexModel(IMemberRepository memberRepository)
+        public IndexModel(IMemberRepositoryAsync memberRepository)
         {
             _repo = memberRepository;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
-            Members = _repo.GetAllMembers();
+            try
+            {
+                //Members = MemberFilter(_repo.GetAllMembers());
+                Members = await _repo.GetAllMembers();
+            }
+            catch(Exception ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            Members = await _repo.GetAllMembers();
             List<Predicate<Member>> pList = [];
             if (!string.IsNullOrEmpty(FilterBy) && !string.IsNullOrEmpty(FilterCriteria))
             {

@@ -20,18 +20,21 @@ namespace SailClubLibrary.Services
     {
         #region Instance Fields
         private Dictionary<string, Member> _members;
-        private string _queryCount = "COUNT(*) FROM Members";
+        //private string _queryCount = "COUNT(*) FROM Members";
+        private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
         private string _insertSql = "Insert INTO Members Values(@ID, @FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole)";
         private string _queryDelete = "DELETE FROM Members WHERE Member_PhoneNumber = @PhoneNumber";
+        private string _queryUpdate = "UPDATE Member SET Member_FirstName = @FirstName, Member_SurName = @SurName, Member_PhoneNumber = @PhoneNumber, Member_Address = @Address, Member_City = @City, Member_Mail = @Mail, Member_TheMemberType = @TheMemberType, Member_TheMemberRole = @TheMemberRole WHERE Member_PhoneNumber = @PhoneNumber";
 
         //int IMemberRepository.Count => throw new NotImplementedException();
-        public Task<int> Count { get { return GetCount(); } }
+
 
         #region Properties
         /// <summary>
         /// Count used for counting members in _members repository
         /// </summary>
+        public Task<int> Count { get { return GetCount(); } }
         //public int Count { get { return _members.Count; } }
 
         #endregion
@@ -48,38 +51,50 @@ namespace SailClubLibrary.Services
         #endregion
 
         #region Methods
+
+
         public async Task<int> GetCount()
         {
-            int count = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(_queryCount, connection))
             {
-
-                try
-                {
-                    SqlCommand command = new SqlCommand(_queryCount, connection);
-                    command.Connection.OpenAsync();
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
-                    while (reader.Read())
-                    {
-                        count = reader.GetInt32(0);
-                    }
-                    reader.Close();
-                }
-                catch (SqlException sqlExp)
-                {
-                    Console.WriteLine("Database error" + sqlExp.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Generel fejl: " + ex.Message);
-                }
-                finally
-                {
-
-                }
+                await connection.OpenAsync();
+                object? result = await cmd.ExecuteScalarAsync();
+                return Convert.ToInt32(result);
             }
-            return count;
         }
+        //public async Task<int> GetCount()
+        //{
+        //    int count = 0;
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+
+        //        try
+        //        {
+        //            SqlCommand command = new SqlCommand(_queryCount, connection);
+        //            command.Connection.OpenAsync();
+        //            SqlDataReader reader = await command.ExecuteReaderAsync();
+        //            while (reader.Read())
+        //            {
+        //                count = reader.GetInt32(0);
+        //            }
+        //            reader.Close();
+        //        }
+        //        catch (SqlException sqlExp)
+        //        {
+        //            Console.WriteLine("Database error" + sqlExp.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("Generel fejl: " + ex.Message);
+        //        }
+        //        finally
+        //        {
+
+        //        }
+        //    }
+        //    return count;
+        //}
         // Formål:
         // Tilføje Medlem
         // if-statement:
@@ -128,39 +143,61 @@ namespace SailClubLibrary.Services
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                try
-                {
-                    SqlCommand command = new SqlCommand(_insertSql, connection);
-                    await command.Connection.OpenAsync();
-                    command.Parameters.AddWithValue("@ID", member.Id);
-                    command.Parameters.AddWithValue("@FirstName", member.FirstName);
-                    command.Parameters.AddWithValue("@SurName", member.SurName);
-                    command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
-                    command.Parameters.AddWithValue("@Address", member.Address);
-                    command.Parameters.AddWithValue("@City", member.City);
-                    command.Parameters.AddWithValue("@Mail", member.Mail);
-                    command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
-                    command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
-                    int numberOfRow = command.ExecuteNonQuery();
-                    //Thread.Sleep(1000);
-                    //return numberOfRow == 1;
-                    //return member;
-                }
-                catch (SqlException sqlExp)
-                {
-                    Console.WriteLine("Database error" + sqlExp.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Generel fejl: " + ex.Message);
-                }
-                finally
-                {
-
-                }
+                SqlCommand command = new SqlCommand(_insertSql, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@ID", member.Id);
+                command.Parameters.AddWithValue("@FirstName", member.FirstName);
+                command.Parameters.AddWithValue("@SurName", member.SurName);
+                command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+                command.Parameters.AddWithValue("@Address", member.Address);
+                command.Parameters.AddWithValue("@City", member.City);
+                command.Parameters.AddWithValue("@Mail", member.Mail);
+                command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
+                command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
+                int numberOfRow = command.ExecuteNonQuery();
+                //Thread.Sleep(1000);
+                //return numberOfRow == 1;
+                //return member;
             }
             //return false;
         }
+        //public async Task AddMember(Member member)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        try
+        //        {
+        //            SqlCommand command = new SqlCommand(_insertSql, connection);
+        //            await command.Connection.OpenAsync();
+        //            command.Parameters.AddWithValue("@ID", member.Id);
+        //            command.Parameters.AddWithValue("@FirstName", member.FirstName);
+        //            command.Parameters.AddWithValue("@SurName", member.SurName);
+        //            command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+        //            command.Parameters.AddWithValue("@Address", member.Address);
+        //            command.Parameters.AddWithValue("@City", member.City);
+        //            command.Parameters.AddWithValue("@Mail", member.Mail);
+        //            command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
+        //            command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
+        //            int numberOfRow = command.ExecuteNonQuery();
+        //            //Thread.Sleep(1000);
+        //            //return numberOfRow == 1;
+        //            //return member;
+        //        }
+        //        catch (SqlException sqlExp)
+        //        {
+        //            Console.WriteLine("Database error" + sqlExp.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("Generel fejl: " + ex.Message);
+        //        }
+        //        finally
+        //        {
+
+        //        }
+        //    }
+        //    //return false;
+        //}
         // Formål:
         // At få fat på en list med alle medlemmer/objekter
         // Metoden returnere via en indbygget metode som hedder ToList(); som henter liste med _members Values
@@ -173,44 +210,74 @@ namespace SailClubLibrary.Services
             List<Member> foundMembers = new List<Member>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                try
+                SqlCommand command = new SqlCommand(_queryString, connection);
+                await command.Connection.OpenAsync();
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
                 {
-                    SqlCommand command = new SqlCommand(_queryString, connection);
-                    await command.Connection.OpenAsync();
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
-                    while (reader.Read())
-                    {
-                        int memberId = reader.GetInt32("Member_Id");
-                        string firstName = reader.GetString("Member_FirstName");
-                        string surName = reader.GetString("Member_SurName");
-                        string phoneNumber = reader.GetString("Member_PhoneNumber");
-                        string memberAddress = reader.GetString("Member_Address");
-                        string city = reader.GetString("Member_City");
-                        string mail = reader.GetString("Member_Mail");
-                        MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
-                        MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
-                        Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
-                        foundMembers.Add(member);
-                    }
-                    reader.Close();
+                    int memberId = reader.GetInt32("Member_Id");
+                    string firstName = reader.GetString("Member_FirstName");
+                    string surName = reader.GetString("Member_SurName");
+                    string phoneNumber = reader.GetString("Member_PhoneNumber");
+                    string memberAddress = reader.GetString("Member_Address");
+                    string city = reader.GetString("Member_City");
+                    string mail = reader.GetString("Member_Mail");
+                    MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
+                    MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
+                    Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
+                    foundMembers.Add(member);
                 }
-                catch (SqlException sqlExp)
-                {
-                    Console.WriteLine("Database error" + sqlExp.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Generel fejl: " + ex.Message);
-                }
-                finally
-                {
-
-                }
+                reader.Close();
             }
             //Console.WriteLine(foundMembers.Count);
             //Console.ReadKey();
             return foundMembers;
         }
+        //public async Task<List<Member>> GetAllMembers()
+        //{
+        //    List<Member> foundMembers = new List<Member>();
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        try
+        //        {
+        //            SqlCommand command = new SqlCommand(_queryString, connection);
+        //            await command.Connection.OpenAsync();
+        //            SqlDataReader reader = await command.ExecuteReaderAsync();
+        //            while (reader.Read())
+        //            {
+        //                int memberId = reader.GetInt32("Member_Id");
+        //                string firstName = reader.GetString("Member_FirstName");
+        //                string surName = reader.GetString("Member_SurName");
+        //                string phoneNumber = reader.GetString("Member_PhoneNumber");
+        //                string memberAddress = reader.GetString("Member_Address");
+        //                string city = reader.GetString("Member_City");
+        //                string mail = reader.GetString("Member_Mail");
+        //                MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
+        //                MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
+        //                Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
+        //                foundMembers.Add(member);
+        //            }
+        //            reader.Close();
+        //        }
+        //        catch (SqlException sqlExp)
+        //        {
+        //            throw sqlExp;
+        //            Console.WriteLine("Database error" + sqlExp.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //            Console.WriteLine("Generel fejl: " + ex.Message);
+        //        }
+        //        finally
+        //        {
+
+        //        }
+        //    }
+        //    //Console.WriteLine(foundMembers.Count);
+        //    //Console.ReadKey();
+        //    return foundMembers;
+        //}
         // Formål:
         // Fjerne Medlem
         // Metoden sletter via metoden Remove, og sletter telefonnummeret fra _members
@@ -218,36 +285,52 @@ namespace SailClubLibrary.Services
         /// <summary>
         /// Method for removing a member from the dictionary, using their phone number
         /// </summary>
-        public async void RemoveMember(Member member)
+        public async Task RemoveMember(Member member)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                try
-                {
-                    //Member memberToBeDel = await SearchMember(member.PhoneNumber);
-                    //if(memberToBeDel == null)
-                    //{
-                    //    return;
-                    //}
-                    SqlCommand command = new SqlCommand(_queryDelete, connection);
-                    await command.Connection.OpenAsync();
-                    command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
-                    int numberOfRows = await command.ExecuteNonQueryAsync();
-                }
-                catch (SqlException sqlExp)
-                {
-                    Console.WriteLine("Database error" + sqlExp.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Generel fejl: " + ex.Message);
-                }
-                finally
-                {
-
-                }
+                //Member memberToBeDel = await SearchMember(member.PhoneNumber);
+                //if(memberToBeDel == null)
+                //{
+                //    return;
+                //}
+                SqlCommand command = new SqlCommand(_queryDelete, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+                //int numberOfRows = await command.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
             }
         }
+        //public async Task RemoveMember(Member member)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        try
+        //        {
+        //            //Member memberToBeDel = await SearchMember(member.PhoneNumber);
+        //            //if(memberToBeDel == null)
+        //            //{
+        //            //    return;
+        //            //}
+        //            SqlCommand command = new SqlCommand(_queryDelete, connection);
+        //            await command.Connection.OpenAsync();
+        //            command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+        //            int numberOfRows = await command.ExecuteNonQueryAsync();
+        //        }
+        //        catch (SqlException sqlExp)
+        //        {
+        //            Console.WriteLine("Database error" + sqlExp.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("Generel fejl: " + ex.Message);
+        //        }
+        //        finally
+        //        {
+
+        //        }
+        //    }
+        //}
         // Formål:
         // Opdatere Medlem
         // if-statement:
@@ -256,22 +339,74 @@ namespace SailClubLibrary.Services
         /// <summary>
         /// Method to update a member's info, using their phone number to distinguish them
         /// </summary>
-        public void UpdateMember(Member updatedMember)
-        {
-            if (_members.ContainsKey(updatedMember.PhoneNumber))
-            {
-                Member existingMember = _members[updatedMember.PhoneNumber];
+        //public async void UpdateMember(Member updatedMember)
+        //{
+        //    if (_members.ContainsKey(updatedMember.PhoneNumber))
+        //    {
+        //        Member existingMember = _members[updatedMember.PhoneNumber];
 
-                existingMember.FirstName = updatedMember.FirstName;
-                existingMember.SurName = updatedMember.SurName;
-                existingMember.Address = updatedMember.Address;
-                existingMember.City = updatedMember.City;
-                existingMember.Mail = updatedMember.Mail;
-                existingMember.TheMemberType = updatedMember.TheMemberType;
-                existingMember.TheMemberRole = updatedMember.TheMemberRole;
+        //        existingMember.FirstName = updatedMember.FirstName;
+        //        existingMember.SurName = updatedMember.SurName;
+        //        existingMember.Address = updatedMember.Address;
+        //        existingMember.City = updatedMember.City;
+        //        existingMember.Mail = updatedMember.Mail;
+        //        existingMember.TheMemberType = updatedMember.TheMemberType;
+        //        existingMember.TheMemberRole = updatedMember.TheMemberRole;
+        //    }
+        //}
+        public async Task UpdateMember(Member updatedMember)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(_queryUpdate, connection);
+                await command.Connection.OpenAsync();
+                //command.Parameters.AddWithValue("@ID", updatedMember.Id);
+                command.Parameters.AddWithValue("@FirstName", updatedMember.FirstName);
+                command.Parameters.AddWithValue("@SurName", updatedMember.SurName);
+                command.Parameters.AddWithValue("@PhoneNumber", updatedMember.PhoneNumber);
+                command.Parameters.AddWithValue("@Address", updatedMember.Address);
+                command.Parameters.AddWithValue("@City", updatedMember.City);
+                command.Parameters.AddWithValue("@Mail", updatedMember.Mail);
+                command.Parameters.AddWithValue("@TheMemberType", updatedMember.TheMemberType);
+                command.Parameters.AddWithValue("@TheMemberRole", updatedMember.TheMemberRole);
+                //int numberOfRow = command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
+        //public async Task UpdateMember(Member updatedMember)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        try
+        //        {
+        //            SqlCommand command = new SqlCommand(_queryUpdate, connection);
+        //            await command.Connection.OpenAsync();
+        //            command.Parameters.AddWithValue("@ID", updatedMember.Id);
+        //            command.Parameters.AddWithValue("@FirstName", updatedMember.FirstName);
+        //            command.Parameters.AddWithValue("@SurName", updatedMember.SurName);
+        //            command.Parameters.AddWithValue("@PhoneNumber", updatedMember.PhoneNumber);
+        //            command.Parameters.AddWithValue("@Address", updatedMember.Address);
+        //            command.Parameters.AddWithValue("@City", updatedMember.City);
+        //            command.Parameters.AddWithValue("@Mail", updatedMember.Mail);
+        //            command.Parameters.AddWithValue("@TheMemberType", updatedMember.TheMemberType);
+        //            command.Parameters.AddWithValue("@TheMemberRole", updatedMember.TheMemberRole);
+        //            int numberOfRow = command.ExecuteNonQuery();
+        //        }
+        //        catch (SqlException sqlExp)
+        //        {
+        //            Console.WriteLine("Database error" + sqlExp.Message);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine("Generel fejl: " + ex.Message);
+        //        }
+        //        finally
+        //        {
 
+        //        }
+
+        //    }
+        //}
         /// <summary>
         /// Searches through the member dictionary and returns the member with the given phonenumber. 
         /// </summary>
@@ -300,19 +435,19 @@ namespace SailClubLibrary.Services
         /// <summary>
         /// Method for printing the info of every member in the dictionary
         /// </summary>
-        public void PrintAll()
+        public async Task PrintAll()
         {
-            foreach (Member member in _members.Values)
+            foreach (Member member in await GetAllMembers())
             {
                 Console.WriteLine(member);
                 Console.WriteLine();
             }
         }
 
-        public List<Member> FilterMembers(string filterCriteria)
+        public async Task<List<Member>> FilterMembers(string filterCriteria)
         {
             List<Member> mList = [];
-            foreach (Member m in _members.Values)
+            foreach (Member m in await GetAllMembers())
             {
                 if (m.FirstName.Contains(filterCriteria))
                 {
@@ -340,21 +475,6 @@ namespace SailClubLibrary.Services
                 }
             }
             return mList;
-        }
-
-        Task IMemberRepository.RemoveMember(Member member)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IMemberRepository.UpdateMember(Member member)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<Member>> IMemberRepository.FilterMembers(string filterCriteria)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }
