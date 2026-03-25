@@ -8,7 +8,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
 {
     public class CreateMemberModel : PageModel
     {
-        private IMemberRepository _repo;
+        private IMemberRepositoryAsync _repo;
 
         private IWebHostEnvironment webHostEnvironment;
 
@@ -16,7 +16,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public Member NewMember { get; set; }
 
         //public CreateMemberModel(IMemberRepository memberRepository)
-        public CreateMemberModel(IMemberRepository memberRepository, IWebHostEnvironment webHost)
+        public CreateMemberModel(IMemberRepositoryAsync memberRepository, IWebHostEnvironment webHost)
         {
             _repo = memberRepository;
             webHostEnvironment = webHost;
@@ -24,7 +24,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public void OnGet()
         {
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
@@ -32,7 +32,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
             }
             try
             {
-                _repo.AddMember(NewMember);
+                await _repo.AddMember(NewMember);
             }
             catch (MemberPhoneNumberExistsException mEx)
             {

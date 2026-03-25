@@ -38,7 +38,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
             {
                 ViewData["ErrorMessage"] = ex.Message;
             }
-            Members = await _repo.GetAllMembers();
+            //Members = await _repo.GetAllMembers();
             List<Predicate<Member>> pList = [];
             if (!string.IsNullOrEmpty(FilterBy) && !string.IsNullOrEmpty(FilterCriteria))
             {

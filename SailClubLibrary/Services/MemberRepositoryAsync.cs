@@ -1,15 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
-using SailClubLibrary.Data;
-using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SailClubLibrary.Services
 {
@@ -23,9 +16,20 @@ namespace SailClubLibrary.Services
         //private string _queryCount = "COUNT(*) FROM Members";
         private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
-        private string _insertSql = "Insert INTO Members Values(@ID, @FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole)";
-        private string _queryDelete = "DELETE FROM Members WHERE Member_PhoneNumber = @PhoneNumber";
-        private string _queryUpdate = "UPDATE Member SET Member_FirstName = @FirstName, Member_SurName = @SurName, Member_PhoneNumber = @PhoneNumber, Member_Address = @Address, Member_City = @City, Member_Mail = @Mail, Member_TheMemberType = @TheMemberType, Member_TheMemberRole = @TheMemberRole WHERE Member_PhoneNumber = @PhoneNumber";
+        private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole)";
+        private string _queryDelete = "DELETE FROM Members WHERE Member_Id = @ID";
+        private string _queryUpdate = "UPDATE Members " +
+            "SET Member_FirstName = @FirstName," +
+            " Member_SurName = @SurName," +
+            " Member_PhoneNumber = @PhoneNumber," +
+            " Member_Address = @Address," +
+            " Member_City = @City," +
+            " Member_Mail = @Mail," +
+            " Member_TheMemberType = @TheMemberType," +
+            " Member_TheMemberRole = @TheMemberRole " +
+            //" WHERE Member_Id = @ID";
+            "WHERE Member_Id = @ID";
+        private string _searchSql = "SELECT * FROM Members WHERE Member_ID = @ID";
 
         //int IMemberRepository.Count => throw new NotImplementedException();
 
@@ -145,7 +149,7 @@ namespace SailClubLibrary.Services
             {
                 SqlCommand command = new SqlCommand(_insertSql, connection);
                 await command.Connection.OpenAsync();
-                command.Parameters.AddWithValue("@ID", member.Id);
+                //command.Parameters.AddWithValue("@ID", member.Id);
                 command.Parameters.AddWithValue("@FirstName", member.FirstName);
                 command.Parameters.AddWithValue("@SurName", member.SurName);
                 command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
@@ -154,7 +158,8 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@Mail", member.Mail);
                 command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
                 command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
-                int numberOfRow = command.ExecuteNonQuery();
+                //int numberOfRow = command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 //Thread.Sleep(1000);
                 //return numberOfRow == 1;
                 //return member;
@@ -296,7 +301,7 @@ namespace SailClubLibrary.Services
                 //}
                 SqlCommand command = new SqlCommand(_queryDelete, connection);
                 await command.Connection.OpenAsync();
-                command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
+                command.Parameters.AddWithValue("@ID", member.Id);
                 //int numberOfRows = await command.ExecuteNonQueryAsync();
                 await command.ExecuteNonQueryAsync();
             }
@@ -358,9 +363,11 @@ namespace SailClubLibrary.Services
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                
                 SqlCommand command = new SqlCommand(_queryUpdate, connection);
                 await command.Connection.OpenAsync();
                 //command.Parameters.AddWithValue("@ID", updatedMember.Id);
+                command.Parameters.AddWithValue("@ID", updatedMember.Id);
                 command.Parameters.AddWithValue("@FirstName", updatedMember.FirstName);
                 command.Parameters.AddWithValue("@SurName", updatedMember.SurName);
                 command.Parameters.AddWithValue("@PhoneNumber", updatedMember.PhoneNumber);
@@ -418,19 +425,61 @@ namespace SailClubLibrary.Services
         //    }
         //    return null;
         //}
-        public async Task<Member?> SearchMember(string phoneNumber)
+        //public async Task<Member?> SearchMember(string phoneNumber)
+        //{
+        //    Task<List<Member>> task = GetAllMembers();
+        //    List<Member> members = await task;
+        //    foreach (Member m in members)
+        //    {
+        //        if (m.PhoneNumber == phoneNumber)
+        //        {
+        //            return m;
+        //        }
+        //    }
+        //    return null;
+        //}
+        public async Task<Member?> SearchMember(int id)
         {
-            Task<List<Member>> task = GetAllMembers();
-            List<Member> members = await task;
-            foreach (Member m in members)
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                if (m.PhoneNumber == phoneNumber)
+                Member member = new Member();
+            
+                SqlCommand command = new SqlCommand(_searchSql, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@ID", id);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(await reader.ReadAsync())
                 {
-                    return m;
+                    int memberId = reader.GetInt32("Member_Id");
+                    string firstName = reader.GetString("Member_FirstName");
+                    string surName = reader.GetString("Member_SurName");
+                    string phoneNumber = reader.GetString("Member_PhoneNumber");
+                    string memberAddress = reader.GetString("Member_Address");
+                    string city = reader.GetString("Member_City");
+                    string mail = reader.GetString("Member_Mail");
+                    MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
+                    MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
+                    member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
+                    reader.Close();
                 }
+                
+                return member;
             }
             return null;
         }
+        //public async Task<Member?> SearchMember(int id)
+        //{
+        //    Task<List<Member>> task = GetAllMembers();
+        //    List<Member> members = await task;
+        //    foreach (Member m in members)
+        //    {
+        //        if (m.Id == id)
+        //        {
+        //            return m;
+        //        }
+        //    }
+        //    return null;
+        //}
 
         /// <summary>
         /// Method for printing the info of every member in the dictionary

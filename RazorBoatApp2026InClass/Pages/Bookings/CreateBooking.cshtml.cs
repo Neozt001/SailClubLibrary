@@ -38,6 +38,7 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
         {
 
             TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
+            //TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
             TheBooking.TheBoat = _bRepo.SearchBoat(SailNumber);
             TheBooking.StartDate = StartDate;
             TheBooking.EndDate = EndDate;

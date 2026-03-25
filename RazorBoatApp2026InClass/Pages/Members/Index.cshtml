@@ -54,7 +54,7 @@ search: <input type="text" asp-for = "@Model.FilterCriteria" />
                 @* <th>ID</th> *@
                 <th>
                     <button type="submit" class="btn btn-link" name="SortBy" Value="ID">ID</button>
-                </th>
+                </th> 
                 @* <th>FirstName</th> *@
                 <th>
                     <button type="submit" class="btn btn-link" name="SortBy" Value="FirstName">FirstName</button>
@@ -88,8 +88,8 @@ search: <input type="text" asp-for = "@Model.FilterCriteria" />
                 <td>@item.Mail</td>
                 <td>@item.TheMemberType</td>
                 <td>@item.TheMemberRole</td>
-                <td><a asp-page="DeleteMember" asp-route-phoneNumber="@item.PhoneNumber">Delete</a> |
-                <a asp-page="EditMember" asp-route-phoneNumber="@item.PhoneNumber">Edit</a></td>
+                <td><a asp-page="DeleteMember" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="EditMember" asp-route-id="@item.Id">Edit</a></td>
             </tr>
         }
     </tbody>

@@ -36,18 +36,17 @@ namespace SailClubLibrary.Models
         }
 
         #region Constructor
-        public Boat(int id, BoatType boatType, string model, string sailNumber, string engineInfo,
-            double draft, double width, double length, string yearOfConstruction)
+        public Boat(int id, string sailNumber, string model, double draft, double width, double length, string yearOfConstruction, string engineInfo, BoatType boatType)
         {
             Id = id;
-            TheBoatType = boatType;
-            Model = model;
             SailNumber = sailNumber;
-            EngineInfo = engineInfo;
+            Model = model;
             Draft = draft;
             Width = width;
             Length = length;
             YearOfConstruction = yearOfConstruction;
+            EngineInfo = engineInfo;
+            TheBoatType = boatType;
         }
 
         #endregion

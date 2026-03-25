@@ -8,10 +8,11 @@
 <h1>Edit Member</h1>
 
 <form method="post">
-    <div class="form-group">
+    <input type="hidden" asp-for="MemberToUpdate.Id" />
+    @* <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.Id" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.Id" class="form-control" />
-    </div>
+    </div> *@
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.FirstName" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.FirstName" class="form-control" />
@@ -46,7 +47,7 @@
     </div>
 
     <div class="form-group">
-        <input type="submit" asp-page-handler="Update" asp-route-phoneNumber="@Model.MemberToUpdate.PhoneNumber" value="Update Member" class="btn btn-primary" />
+        <input type="submit" asp-page-handler="Update" asp-route-id="@Model.MemberToUpdate.Id" value="Update Member" class="btn btn-primary" />
     </div>
     <div class="form-group">
         <input type="submit" asp-page-handler="Delete" value="Delete Member" class="btn btn-danger" />
