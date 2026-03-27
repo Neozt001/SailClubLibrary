@@ -21,6 +21,7 @@ namespace SailClubLibrary.Models
         public MemberType TheMemberType { get; set; }
         public MemberRole TheMemberRole { get; set; }
         public int Id { get; set; }
+        public string MemberImage { get; set; }
         #endregion
 
         #region Constructor

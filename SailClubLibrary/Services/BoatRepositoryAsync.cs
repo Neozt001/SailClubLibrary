@@ -16,10 +16,9 @@ namespace SailClubLibrary.Services
     /// <summary>
     /// Class for Constructing and calling Boat Repository Objects using the interface
     /// </summary>
-    public class BoatRepositoryAsync : Connection, IBoatRepositoryAsync
+    public class BoatRepositoryAsync : Connection
     {
         #region Instance Field
-        private Dictionary<string, Boat> _boats;
         private string _queryCount = "SELECT COUNT(*) FROM Boats";
         private string _queryString = "SELECT * FROM Boats";
         private string _queryDelete = "DELETE FROM Boats WHERE Boat_Id = @ID";
@@ -160,30 +159,15 @@ namespace SailClubLibrary.Services
                 await command.Connection.OpenAsync();
                 //command.Parameters.AddWithValue("@ID", updatedMember.Id);
                 //command.Parameters.AddWithValue("@SailNumber", boat.SailNumber);
-                command.Parameters.AddWithValue("@Model", boat.Model);
-                command.Parameters.AddWithValue("@Draft", boat.Draft);
-                command.Parameters.AddWithValue("@Width", boat.Width);
-                command.Parameters.AddWithValue("@Length", boat.Length);
-                command.Parameters.AddWithValue("@YearOfConstruction", boat.YearOfConstruction);
-                command.Parameters.AddWithValue("@EngineInfo", boat.EngineInfo);
-                command.Parameters.AddWithValue("@BoatType", boat.TheBoatType);
+                command.Parameters.AddWithValue("@Model", updatedBoat.Model);
+                command.Parameters.AddWithValue("@Draft", updatedBoat.Draft);
+                command.Parameters.AddWithValue("@Width", updatedBoat.Width);
+                command.Parameters.AddWithValue("@Length", updatedBoat.Length);
+                command.Parameters.AddWithValue("@YearOfConstruction", updatedBoat.YearOfConstruction);
+                command.Parameters.AddWithValue("@EngineInfo", updatedBoat.EngineInfo);
+                command.Parameters.AddWithValue("@BoatType", updatedBoat.TheBoatType);
                 //int numberOfRow = command.ExecuteNonQuery();
                 await command.ExecuteNonQueryAsync();
-            }
-        }
-        public void UpdateBoat(Boat updatedBoat)
-        {
-            if (_boats.ContainsKey(updatedBoat.SailNumber))
-            {
-                Boat existingBoat = _boats[updatedBoat.SailNumber];
-
-                existingBoat.TheBoatType = updatedBoat.TheBoatType;
-                existingBoat.Model = updatedBoat.Model;
-                existingBoat.EngineInfo = updatedBoat.EngineInfo;
-                existingBoat.Draft = updatedBoat.Draft;
-                existingBoat.Width = updatedBoat.Width;
-                existingBoat.Length = updatedBoat.Length;
-                existingBoat.YearOfConstruction = updatedBoat.YearOfConstruction;
             }
         }
 
@@ -218,31 +202,6 @@ namespace SailClubLibrary.Services
                 return boat;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Runs through the list and calls the toString() method of every index
-        /// </summary>
-        public void PrintAllBoats()
-        {
-            foreach (var boat in _boats)
-            {
-                Console.WriteLine(boat.ToString());
-            }
-            Console.WriteLine();
-        }
-
-        public List<Boat> FilterBoats(string filterCriteria)
-        {
-            List<Boat> bList = [];
-            foreach (Boat b in _boats.Values)
-            {
-                if (b.Model.Contains(filterCriteria))
-                {
-                    bList.Add(b);
-                }
-            }
-            return bList;
         }
         #endregion
     }

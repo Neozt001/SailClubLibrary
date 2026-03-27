@@ -14,6 +14,9 @@ namespace RazorBoatApp2026InClass.Pages.Members
 
         [BindProperty]
         public Member NewMember { get; set; }
+        [BindProperty]
+        public IFormFile Photo { get; set; }
+
 
         //public CreateMemberModel(IMemberRepository memberRepository)
         public CreateMemberModel(IMemberRepositoryAsync memberRepository, IWebHostEnvironment webHost)
@@ -26,6 +29,16 @@ namespace RazorBoatApp2026InClass.Pages.Members
         }
         public async Task<IActionResult> OnPost()
         {
+            if (Photo != null)
+            {
+                if (NewMember.MemberImage != null)
+                {
+                    string filePath = Path.Combine(webHostEnvironment.WebRootPath, "/images/MemberImages", NewMember.MemberImage);
+                    System.IO.File.Delete(filePath);
+                }
+
+                NewMember.MemberImage = ProcessUploadedFile();
+            }
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -46,6 +59,22 @@ namespace RazorBoatApp2026InClass.Pages.Members
             }
             return RedirectToPage("index");
         }
+        private string ProcessUploadedFile()
+        {
+            string uniqueFileName = null;
+            if (Photo != null)
+            {
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/MemberImages");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    Photo.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+
         //public IActionResult OnPost() //Bruges til at oprette/update/delete
         //{
         //    if (Photo != null)

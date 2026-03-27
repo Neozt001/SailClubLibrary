@@ -12,7 +12,6 @@ namespace SailClubLibrary.Services
     public class MemberRepositoryAsync : Connection, IMemberRepositoryAsync
     {
         #region Instance Fields
-        private Dictionary<string, Member> _members;
         //private string _queryCount = "COUNT(*) FROM Members";
         private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
@@ -49,8 +48,6 @@ namespace SailClubLibrary.Services
         /// </summary>
         public MemberRepositoryAsync()
         {
-            //_members = new Dictionary<string, Member>();
-            //_members = new MockData().MemberData;
         }
         #endregion
 
