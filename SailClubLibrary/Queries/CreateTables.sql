@@ -3,9 +3,9 @@
 USE SailClubDatabase;
 GO
 
+--DROP TABLE IF EXISTS Bookings;
 --DROP TABLE IF EXISTS Boats;
 --DROP TABLE IF EXISTS Members;
---DROP TABLE IF EXISTS Bookings;
 CREATE TABLE Boats(
 	Boat_Id int IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	Boat_SailNumber nvarchar(7) NOT NULL UNIQUE,
@@ -28,6 +28,7 @@ CREATE TABLE Members(
 	Member_Mail nvarchar(30) NOT NULL,
 	Member_TheMemberType int NOT NULL,
 	Member_TheMemberRole int NOT NULL,
+	Member_Image nvarchar(100)
 	);
 
 CREATE TABLE Bookings(
@@ -40,3 +41,6 @@ CREATE TABLE Bookings(
 	FOREIGN KEY (Booking_Id) REFERENCES Members (Member_Id),
 	FOREIGN KEY (Booking_SailNumber) REFERENCES Boats (Boat_SailNumber),
 	);
+
+	--ALTER TABLE Members
+	--ADD CONSTRAINT DEFAULT Member_Image "Male1.jpg" FOR Member_Image;

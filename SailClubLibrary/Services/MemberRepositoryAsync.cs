@@ -15,7 +15,7 @@ namespace SailClubLibrary.Services
         //private string _queryCount = "COUNT(*) FROM Members";
         private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
-        private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole)";
+        private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole, @Image)";
         private string _queryDelete = "DELETE FROM Members WHERE Member_Id = @ID";
         private string _queryUpdate = "UPDATE Members " +
             "SET Member_FirstName = @FirstName," +
@@ -155,13 +155,9 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@Mail", member.Mail);
                 command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
                 command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
-                //int numberOfRow = command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@Image", member.Image);
                 command.ExecuteNonQuery();
-                //Thread.Sleep(1000);
-                //return numberOfRow == 1;
-                //return member;
             }
-            //return false;
         }
         //public async Task AddMember(Member member)
         //{
@@ -226,7 +222,9 @@ namespace SailClubLibrary.Services
                     string mail = reader.GetString("Member_Mail");
                     MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
                     MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
-                    Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
+                    string image = reader.GetString("Member_Image");
+                    Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image);
+
                     foundMembers.Add(member);
                 }
                 reader.Close();
@@ -456,7 +454,8 @@ namespace SailClubLibrary.Services
                     string mail = reader.GetString("Member_Mail");
                     MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("Member_TheMemberType")];
                     MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("Member_TheMemberRole")];
-                    member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole);
+                    string image = reader.GetString("Member_Image");
+                    member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image);
                     reader.Close();
                 }
                 

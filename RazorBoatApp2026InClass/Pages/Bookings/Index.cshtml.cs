@@ -17,5 +17,6 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
         {
             Bookings = _repo.GetAllBookings();
         }
+
     }
 }

@@ -31,20 +31,22 @@ namespace RazorBoatApp2026InClass.Pages.Members
         {
             if (Photo != null)
             {
-                if (NewMember.MemberImage != null)
+                if (NewMember.Image != null)
                 {
-                    string filePath = Path.Combine(webHostEnvironment.WebRootPath, "/images/MemberImages", NewMember.MemberImage);
+                    string filePath = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages", NewMember.Image);
                     System.IO.File.Delete(filePath);
                 }
 
-                NewMember.MemberImage = ProcessUploadedFile();
+                NewMember.Image = ProcessUploadedFile();
             }
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
             try
             {
+                
                 await _repo.AddMember(NewMember);
             }
             catch (MemberPhoneNumberExistsException mEx)
@@ -64,7 +66,11 @@ namespace RazorBoatApp2026InClass.Pages.Members
             string uniqueFileName = null;
             if (Photo != null)
             {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/MemberImages");
+                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))

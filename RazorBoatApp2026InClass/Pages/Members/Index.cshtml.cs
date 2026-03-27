@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SailClubLibrary.Filter;
@@ -29,15 +31,18 @@ namespace RazorBoatApp2026InClass.Pages.Members
         }
         public async Task OnGet()
         {
+
             try
             {
                 //Members = MemberFilter(_repo.GetAllMembers());
                 Members = await _repo.GetAllMembers();
+
             }
             catch(Exception ex)
             {
                 ViewData["ErrorMessage"] = ex.Message;
             }
+            
             //Members = await _repo.GetAllMembers();
             List<Predicate<Member>> pList = [];
             if (!string.IsNullOrEmpty(FilterBy) && !string.IsNullOrEmpty(FilterCriteria))

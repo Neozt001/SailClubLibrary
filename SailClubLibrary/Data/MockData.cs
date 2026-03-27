@@ -13,8 +13,8 @@ namespace SailClubLibrary.Data
         private Dictionary<string, Member> _memberData =
             new Dictionary<string, Member>()
             {
-            { "23456789", new Member(1, "Peter","Jensen","23456789","Gaden 1","Hillerød","PH@gamil.com",MemberType.Senior,MemberRole.Member) },
-             { "65345890", new Member(2, "Charlotte","Hansen","65345890","Street 1","Roskilde","ch@gamil.com",MemberType.Adult,MemberRole.Admin) },
+            { "23456789", new Member(1, "Peter","Jensen","23456789","Gaden 1","Hillerød","PH@gamil.com",MemberType.Senior,MemberRole.Member, "Default.jpg") },
+             { "65345890", new Member(2, "Charlotte","Hansen","65345890","Street 1","Roskilde","ch@gamil.com",MemberType.Adult,MemberRole.Admin, "Default.jpg") },
             };
 
         private Dictionary<string, Boat> _boatData =

@@ -51,6 +51,7 @@ search: <input type="text" asp-for = "@Model.FilterCriteria" />
     <thead>
         <tr>
             <form method="get">
+                <th>Image</th>
                 @* <th>ID</th> *@
                 <th>
                     <button type="submit" class="btn btn-link" name="SortBy" Value="ID">ID</button>
@@ -79,6 +80,9 @@ search: <input type="text" asp-for = "@Model.FilterCriteria" />
         @foreach(Member item in Model.Members)
         {
             <tr>
+                <td>
+                    <img src="~/Images/MemberImages/@item.Image" class="rounded-circle" width="80" height="70" />
+                </td>
                 <td>@item.Id</td>
                 <td>@item.FirstName</td>
                 <td>@item.SurName</td>
@@ -90,6 +94,7 @@ search: <input type="text" asp-for = "@Model.FilterCriteria" />
                 <td>@item.TheMemberRole</td>
                 <td><a asp-page="DeleteMember" asp-route-id="@item.Id">Delete</a> |
                 <a asp-page="EditMember" asp-route-id="@item.Id">Edit</a></td>
+
             </tr>
         }
     </tbody>

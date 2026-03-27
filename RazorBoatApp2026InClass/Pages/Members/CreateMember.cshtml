@@ -6,7 +6,8 @@
 }
 
 <h1>Create member</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
+    
     @* <div class="form-group">
         <div asp-validation-summary="All" class="text-danger"></div>
         <label asp-for="@Model.NewMember.Id" class="control-label"></label>
@@ -54,6 +55,13 @@
         <span asp-validation-for="@Model.NewMember.TheMemberRole" class="text-danger"></span>
     </div>
     <div class="form-group">
+        <label asp-for="@Model.Photo" class="control-label"></label>
+        <div class="custom-file">
+            <input asp-for="@Model.Photo" class="custom-file-input form-control" />
+            <label class="custom-file-label">Gem Billede</label>
+        </div>
+    </div>
+    <div class="form-group">
         <input type="submit" value="Create a member" class="btn btn-primary" />
     </div>
     <div>
@@ -62,12 +70,3 @@
 
 </form>
 @* IMAGES NOT DONE *@
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="@Model.Photo" class="control-label"></label>
-        <div class="custom-file">
-            <input asp-for="@Model.Photo" class="custom-file-input form-control" />
-            <label class="custom-file-label">Gem Billede</label>
-        </div>
-    </div>
-</form>
