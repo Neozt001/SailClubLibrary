@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RazorBoatApp2026InClass.Helpers;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -9,7 +10,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
     public class EditMemberModel : PageModel
     {
         private IMemberRepositoryAsync _repo;
-        private IWebHostEnvironment webHostEnvironment;
+        private IWebHostEnvironment _webHostEnvironment;
         [BindProperty]
         public Member MemberToUpdate { get; set; }
 
@@ -19,7 +20,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public EditMemberModel(IMemberRepositoryAsync repo, IWebHostEnvironment webHost)
         {
             _repo = repo;
-            webHostEnvironment = webHost;
+            _webHostEnvironment = webHost;
         }
         public async Task<IActionResult> OnGet(int id)
         {
@@ -28,42 +29,31 @@ namespace RazorBoatApp2026InClass.Pages.Members
         }
         public async Task<IActionResult> OnPostUpdate()
         {
+            string theImage = MemberToUpdate.Image;
             if (Photo != null)
             {
-                if (MemberToUpdate.Image != null)
+                if (MemberToUpdate.Image != null && MemberToUpdate.Image != Constants.DefaultMemberImage)
                 {
-                    string filePath = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages", MemberToUpdate.Image);
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images/MemberBoatImages", MemberToUpdate.Image);
                     System.IO.File.Delete(filePath);
                 }
 
-                MemberToUpdate.Image = ProcessUploadedFile();
+                theImage = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath, Constants.DefaultMemberImage);
             }
+            else
+            {
+                if (string.IsNullOrEmpty(theImage))
+                {
+                    theImage = Constants.DefaultMemberImage;
+                }
+            }
+            MemberToUpdate.Image = theImage;
             await _repo.UpdateMember(MemberToUpdate);
             return RedirectToPage("index");
         }
         public IActionResult OnPostDelete()
         {
             return RedirectToPage("Index");
-        }
-
-        private string ProcessUploadedFile()
-        {
-            string uniqueFileName = null;
-            if (Photo != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    Photo.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
         }
     }
 }

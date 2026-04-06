@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RazorBoatApp2026InClass.Helpers;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -7,26 +8,54 @@ namespace RazorBoatApp2026InClass.Pages.Boats
 {
     public class EditBoatModel : PageModel
     {
-        private IBoatRepository _repo;
+        private IBoatRepositoryAsync _repo;
+        private IWebHostEnvironment _webHostEnvironment;
         [BindProperty]
         public Boat BoatToUpdate { get; set; }
-        public EditBoatModel(IBoatRepository repo)
+        [BindProperty]
+        public IFormFile Photo { get; set; }
+        public EditBoatModel(IBoatRepositoryAsync repo, IWebHostEnvironment webHost)
         {
             _repo = repo;
+            _webHostEnvironment = webHost;
         }
-        public void OnGet(string sailNumber)
+        public async Task OnGet(int id)
         {
-            BoatToUpdate = _repo.SearchBoat(sailNumber);
+            BoatToUpdate = await _repo.SearchBoat(id);
         }
 
-        public IActionResult OnPostUpdate()
+        public async Task<IActionResult> OnPostUpdate()
         {
-            _repo.UpdateBoat(BoatToUpdate);
+            string theImage = BoatToUpdate.Image;
+            if (Photo != null)
+            {
+                if (BoatToUpdate.Image != null && BoatToUpdate.Image != Constants.DefaultBoatImage)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images/MemberBoatImages", BoatToUpdate.Image);
+                    System.IO.File.Delete(filePath);
+                }
+
+                theImage = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath, Constants.DefaultBoatImage);
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(theImage))
+                {
+                    theImage = Constants.DefaultBoatImage;
+                }
+            }
+            BoatToUpdate.Image = theImage;
+            await _repo.UpdateBoat(BoatToUpdate);
             return RedirectToPage("Index");
         }
-        public IActionResult OnPostDelete()
+        //public async Task<IActionResult> OnPostUpdate()
+        //{
+        //    await _repo.UpdateBoat(BoatToUpdate);
+        //    return RedirectToPage("Index");
+        //}
+        public async Task<IActionResult> OnPostDelete()
         {
-            _repo.RemoveBoat(BoatToUpdate.SailNumber);
+            await _repo.RemoveBoat(BoatToUpdate.Id);
             return RedirectToPage("Index");
         }
     }

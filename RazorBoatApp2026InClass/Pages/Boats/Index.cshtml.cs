@@ -9,7 +9,7 @@ namespace RazorBoatApp2026InClass.Pages.NewFolder
     public class IndexModel : PageModel
     {
 
-        private IBoatRepository _bRepo;
+        private IBoatRepositoryAsync _repo;
         public List<Boat> Boats { get; set; }
         [BindProperty(SupportsGet = true)]
         public string SortBy { get; set; }
@@ -19,18 +19,18 @@ namespace RazorBoatApp2026InClass.Pages.NewFolder
 
 
 
-        public IndexModel(IBoatRepository boatRepository)
+        public IndexModel(IBoatRepositoryAsync boatRepository)
         {
-            _bRepo = boatRepository;
+            _repo = boatRepository;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
             if (!string.IsNullOrEmpty(FilterCriteria))
             {
-                Boats = _bRepo.FilterBoats(FilterCriteria);
+                Boats = await _repo.FilterBoats(FilterCriteria);
             }
             else
-                Boats = _bRepo.GetAllBoats();
+                Boats = await _repo.GetAllBoats();
             if(!string.IsNullOrEmpty(SortBy))
             {
                 SortBoats();

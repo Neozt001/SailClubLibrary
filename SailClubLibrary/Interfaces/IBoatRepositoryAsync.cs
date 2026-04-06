@@ -18,7 +18,7 @@ namespace SailClubLibrary.Interfaces
         Task AddBoat(Boat boat);
         Task RemoveBoat(int id);
         Task UpdateBoat(Boat boat);
-        Task<Boat?> SearchBoat(string sailNumber);
+        Task<Boat?> SearchBoat(int id);
         Task<List<Boat>> FilterBoats(string filterCriteria);
         #endregion
     }

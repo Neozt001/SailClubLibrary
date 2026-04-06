@@ -20,8 +20,8 @@ namespace SailClubLibrary.Data
         private Dictionary<string, Boat> _boatData =
               new Dictionary<string, Boat>()
               {
-              { "16-3335", new Boat(1, "16-3335", "Model1", 32, 23, 33, "1982", "Is very good :3", BoatType.TERA)},
-              { "17-8767", new Boat(2, "17-8767", "Model2", 34, 25, 17, "2000", "Fast :3", BoatType.TERA)},
+              { "16-3335", new Boat(1, "16-3335", "Model1", 32, 23, 33, "1982", "Is very good :3", BoatType.TERA, "DefaultBoat.jpg")},
+              { "17-8767", new Boat(2, "17-8767", "Model2", 34, 25, 17, "2000", "Fast :3", BoatType.TERA, "DefaultBoat.jpg")},
               };
         #endregion
 

@@ -15,9 +15,8 @@ namespace SailClubLibrary.Interfaces
         Task AddMember(Member member);
         Task RemoveMember(Member member);
         Task UpdateMember(Member member);
-        Task<List<Member>> GetAllMembers();
-        Task PrintAll();
         Task<Member?> SearchMember(int id);
+        Task<List<Member>> GetAllMembers();
         Task<List<Member>> FilterMembers(string filterCriteria);
     }
 }

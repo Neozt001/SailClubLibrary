@@ -7,16 +7,16 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
 {
     public class ChooseBoatModel : PageModel
     {
-        private IBoatRepository _repo;
+        private IBoatRepositoryAsync _repo;
         public List<Boat> Boats { get; set; }
         //public Boat ChosenBoat { get; set; }
-        public ChooseBoatModel(IBoatRepository boatRepository)
+        public ChooseBoatModel(IBoatRepositoryAsync boatRepository)
         {
             _repo = boatRepository;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
-            Boats = _repo.GetAllBoats();
+            Boats = await _repo.GetAllBoats();
         }
     }
 }

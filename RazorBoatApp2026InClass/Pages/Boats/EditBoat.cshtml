@@ -7,11 +7,12 @@
 
 <h1>Edit Boat</h1>
 
-<form method="post">
-    <div class="form-group">
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="BoatToUpdate.Id" />
+    @* <div class="form-group">
         <label asp-for="@Model.BoatToUpdate.Id" class="control-label"> </label>
         <input asp-for="@Model.BoatToUpdate.Id" class="form-control" />
-    </div>
+    </div> *@
     <div class="form-group">
         <label asp-for="@Model.BoatToUpdate.Model" class="control-label"> </label>
         <input asp-for="@Model.BoatToUpdate.Model" class="form-control" />
@@ -19,6 +20,11 @@
     <div class="form-group">
         <label asp-for="@Model.BoatToUpdate.SailNumber" class="control-label"> </label>
         <input asp-for="@Model.BoatToUpdate.SailNumber" readonly class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.BoatToUpdate.EngineInfo" class="control-label"> </label>
+        <input asp-for="@Model.BoatToUpdate.EngineInfo" class="form-control" />
+        <span asp-validation-for="@Model.BoatToUpdate.EngineInfo" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.BoatToUpdate.TheBoatType" class="control-label"> </label>
@@ -39,6 +45,13 @@
     <div class="form-group">
         <label asp-for="@Model.BoatToUpdate.YearOfConstruction" class="control-label"> </label>
         <input asp-for="@Model.BoatToUpdate.YearOfConstruction" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Photo" class="control-label"></label>
+        <div class="custom-file">
+            <input asp-for="@Model.Photo" class="custom-file-input form-control" />
+            <label class="custom-file-label">Gem ny Billede</label>
+        </div>
     </div>
 
     <div class="form-group">

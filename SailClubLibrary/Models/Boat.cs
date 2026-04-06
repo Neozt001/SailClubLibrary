@@ -28,6 +28,7 @@ namespace SailClubLibrary.Models
         public double Width { get; set; }
         public double Length { get; set; }
         public string YearOfConstruction { get; set; }
+        public string Image { get; set; }
 
         #endregion
         public Boat()
@@ -36,7 +37,7 @@ namespace SailClubLibrary.Models
         }
 
         #region Constructor
-        public Boat(int id, string sailNumber, string model, double draft, double width, double length, string yearOfConstruction, string engineInfo, BoatType boatType)
+        public Boat(int id, string sailNumber, string model, double draft, double width, double length, string yearOfConstruction, string engineInfo, BoatType boatType, string image)
         {
             Id = id;
             SailNumber = sailNumber;
@@ -47,6 +48,7 @@ namespace SailClubLibrary.Models
             YearOfConstruction = yearOfConstruction;
             EngineInfo = engineInfo;
             TheBoatType = boatType;
+            Image = image;
         }
 
         #endregion

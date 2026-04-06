@@ -16,33 +16,42 @@ namespace SailClubLibrary.Services
     /// <summary>
     /// Class for Constructing and calling Boat Repository Objects using the interface
     /// </summary>
-    public class BoatRepositoryAsync : Connection
+    public class BoatRepositoryAsync : Connection, IBoatRepositoryAsync
     {
         #region Instance Field
         private string _queryCount = "SELECT COUNT(*) FROM Boats";
         private string _queryString = "SELECT * FROM Boats";
-        private string _queryDelete = "DELETE FROM Boats WHERE Boat_Id = @ID";
-        private string _searchSql = "SELECT * FROM Boats WHERE Boat_ID = @ID";
-        private string _insertSql = @"INSERT INTO Boats 
+        private string _queryDelete = "DELETE FROM Boats WHERE ID = @ID";
+        private string _searchSql = "SELECT * FROM Boats WHERE ID = @ID";
+        private string _insertSql = @"INSERT INTO Boats
+            (SailNumber, 
+                   Model, 
+                   Draft, 
+                   Width, 
+                   Length, 
+                   YearOfConstruction, 
+                   EngineInfo, 
+                   TheBoatType,
+                   Image)
             Values(@SailNumber, 
                    @Model, 
                    @Draft, 
                    @Width, 
                    @Length, 
-                   @YearOfConstrution, 
+                   @YearOfConstruction, 
                    @EngineInfo, 
-                   @BoatType)";
+                   @BoatType,
+                   @Image)";
         private string _queryUpdate = "UPDATE Boats " +
-            "SET Boat_Model = @Model," +
-            " Boat_Draft = @Draft," +
-            " Boat_Width = @Width," +
-            " Boat_Length = @Length," +
-            " Member_City = @City," +
-            " Member_Mail = @Mail," +
-            " Member_TheMemberType = @TheMemberType," +
-            " Member_TheMemberRole = @TheMemberRole " +
-            //" WHERE Member_Id = @ID";
-            "WHERE Member_Id = @ID";
+            "SET Model = @Model," +
+            " Draft = @Draft," +
+            " Width = @Width," +
+            " Length = @Length," +
+            " YearOfConstruction = @YearOfConstruction," +
+            " EngineInfo = @EngineInfo," +
+            " TheBoatType = @BoatType," +
+            " Image = @Image " +
+            " WHERE ID = @ID";
         #endregion
 
         #region Properties
@@ -85,6 +94,7 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@YearOfConstruction", boat.YearOfConstruction);
                 command.Parameters.AddWithValue("@EngineInfo", boat.EngineInfo);
                 command.Parameters.AddWithValue("@BoatType", boat.TheBoatType);
+                command.Parameters.AddWithValue("@Image", boat.Image);
                 //int numberOfRow = command.ExecuteNonQuery();
                 command.ExecuteNonQuery();
                 //Thread.Sleep(1000);
@@ -107,16 +117,17 @@ namespace SailClubLibrary.Services
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    int boatId = reader.GetInt32("Boat_Id");
-                    string sailNumber = reader.GetString("Boat_SailNumber");
-                    string model = reader.GetString("Boat_Model");
-                    double draft = reader.GetDouble("Boat_Draft");
-                    double width = reader.GetDouble("Boat_Width");
-                    double length = reader.GetDouble("Boat_Length");
-                    string yearOfConstruction = reader.GetString("Boat_YearOfConstruction");
-                    string engineInfo = reader.GetString("Boat_EngineInfo");
-                    BoatType boatType = Enum.GetValues<BoatType>()[reader.GetInt32("Boat_TheBoatType")];
-                    Boat boat = new Boat(boatId, sailNumber, model, draft, width, length, yearOfConstruction, engineInfo, boatType);
+                    int boatId = reader.GetInt32("ID");
+                    string sailNumber = reader.GetString("SailNumber");
+                    string model = reader.GetString("Model");
+                    double draft = reader.GetDouble("Draft");
+                    double width = reader.GetDouble("Width");
+                    double length = reader.GetDouble("Length");
+                    string yearOfConstruction = reader.GetString("YearOfConstruction");
+                    string engineInfo = reader.GetString("EngineInfo");
+                    BoatType boatType = Enum.GetValues<BoatType>()[reader.GetInt32("TheBoatType")];
+                    string image = reader.GetString("Image");
+                    Boat boat = new Boat(boatId, sailNumber, model, draft, width, length, yearOfConstruction, engineInfo, boatType, image);
                     foundBoats.Add(boat);
                 }
                 reader.Close();
@@ -134,11 +145,6 @@ namespace SailClubLibrary.Services
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                //Member memberToBeDel = await SearchMember(member.PhoneNumber);
-                //if(memberToBeDel == null)
-                //{
-                //    return;
-                //}
                 SqlCommand command = new SqlCommand(_queryDelete, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@ID", id);
@@ -157,8 +163,8 @@ namespace SailClubLibrary.Services
 
                 SqlCommand command = new SqlCommand(_queryUpdate, connection);
                 await command.Connection.OpenAsync();
-                //command.Parameters.AddWithValue("@ID", updatedMember.Id);
-                //command.Parameters.AddWithValue("@SailNumber", boat.SailNumber);
+                command.Parameters.AddWithValue("@ID", updatedBoat.Id);
+                command.Parameters.AddWithValue("@SailNumber", updatedBoat.SailNumber);
                 command.Parameters.AddWithValue("@Model", updatedBoat.Model);
                 command.Parameters.AddWithValue("@Draft", updatedBoat.Draft);
                 command.Parameters.AddWithValue("@Width", updatedBoat.Width);
@@ -166,6 +172,7 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@YearOfConstruction", updatedBoat.YearOfConstruction);
                 command.Parameters.AddWithValue("@EngineInfo", updatedBoat.EngineInfo);
                 command.Parameters.AddWithValue("@BoatType", updatedBoat.TheBoatType);
+                command.Parameters.AddWithValue("@Image", updatedBoat.Image);
                 //int numberOfRow = command.ExecuteNonQuery();
                 await command.ExecuteNonQueryAsync();
             }
@@ -186,16 +193,17 @@ namespace SailClubLibrary.Services
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    int boatId = reader.GetInt32("Boat_Id");
-                    string sailNumber = reader.GetString("Boat_SailNumber");
-                    string model = reader.GetString("Boat_Model");
-                    double draft = reader.GetDouble("Boat_Draft");
-                    double width = reader.GetDouble("Boat_Width");
-                    double length = reader.GetDouble("Boat_Length");
-                    string yearOfConstruction = reader.GetString("Boat_YearOfConstruction");
-                    string engineInfo = reader.GetString("Boat_EngineInfo");
-                    BoatType boatType = Enum.GetValues<BoatType>()[reader.GetInt32("Boat_TheBoatType")];
-                    boat = new Boat(boatId, sailNumber, model, draft, width, length, yearOfConstruction, engineInfo, boatType);
+                    int boatId = reader.GetInt32("ID");
+                    string sailNumber = reader.GetString("SailNumber");
+                    string model = reader.GetString("Model");
+                    double draft = reader.GetDouble("Draft");
+                    double width = reader.GetDouble("Width");
+                    double length = reader.GetDouble("Length");
+                    string yearOfConstruction = reader.GetString("YearOfConstruction");
+                    string engineInfo = reader.GetString("EngineInfo");
+                    BoatType boatType = Enum.GetValues<BoatType>()[reader.GetInt32("TheBoatType")];
+                    string image = reader.GetString("Image");
+                    boat = new Boat(boatId, sailNumber, model, draft, width, length, yearOfConstruction, engineInfo, boatType, image);
                     reader.Close();
                 }
 
@@ -203,6 +211,18 @@ namespace SailClubLibrary.Services
             }
             return null;
         }
-        #endregion
+        public async Task<List<Boat>> FilterBoats(string filterCriteria)
+        {
+            List<Boat> bList = [];
+            foreach (Boat b in await GetAllBoats())
+            {
+                if (b.Model.Contains(filterCriteria))
+                {
+                    bList.Add(b);
+                }
+            }
+            return bList;
+        }
     }
+        #endregion
 }

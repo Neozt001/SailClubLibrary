@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RazorBoatApp2026InClass.Helpers;
 using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
+using System.ComponentModel.Design;
 
 namespace RazorBoatApp2026InClass.Pages.Members
 {
     public class CreateMemberModel : PageModel
     {
+
         private IMemberRepositoryAsync _repo;
 
-        private IWebHostEnvironment webHostEnvironment;
+        private IWebHostEnvironment _webHostEnvironment;
 
         [BindProperty]
         public Member NewMember { get; set; }
@@ -22,7 +25,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public CreateMemberModel(IMemberRepositoryAsync memberRepository, IWebHostEnvironment webHost)
         {
             _repo = memberRepository;
-            webHostEnvironment = webHost;
+            _webHostEnvironment = webHost;
         }
         public void OnGet()
         {
@@ -33,20 +36,20 @@ namespace RazorBoatApp2026InClass.Pages.Members
             {
                 if (NewMember.Image != null)
                 {
-                    string filePath = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages", NewMember.Image);
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images/MemberBoatImages", NewMember.Image);
                     System.IO.File.Delete(filePath);
                 }
-
-                NewMember.Image = ProcessUploadedFile();
+                //NewMember.Image = ProcessUploadedFile();
+                NewMember.Image = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath,  Constants.DefaultMemberImage);
             }
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            else
+            {
+                //NewMember.Image = ProcessUploadedFile();
+                NewMember.Image = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath, Constants.DefaultMemberImage);
+            }
             try
             {
-                
+
                 await _repo.AddMember(NewMember);
             }
             catch (MemberPhoneNumberExistsException mEx)
@@ -61,55 +64,28 @@ namespace RazorBoatApp2026InClass.Pages.Members
             }
             return RedirectToPage("index");
         }
-        private string ProcessUploadedFile()
-        {
-            string uniqueFileName = null;
-            if (Photo != null)
-            {
-                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    Photo.CopyTo(fileStream);
-                }
-            }
-            return uniqueFileName;
-        }
-
-        //public IActionResult OnPost() //Bruges til at oprette/update/delete
-        //{
-        //    if (Photo != null)
-        //    {
-        //        if (NewMember.MemberImage != null)
-        //        {
-        //            string filePath = Path.Combine(webHostEnvironment.WebRootPath, "/images/MemberImages", NewMember.MemberImage);
-        //            System.IO.File.Delete(filePath);
-        //        }
-
-        //        NewMember.MemberImage = ProcessUploadedFile();
-        //    }
-        //    try
-        //    {
-        //        private string ProcessUploadedFile()
-        //        {
-        //            string uniqueFileName = null;
-        //            if (Photo != null)
-        //            {
-        //                string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "images/MemberImages");
-        //                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-        //                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-        //                using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //                {
-        //                    Photo.CopyTo(fileStream);
-        //                }
-        //        }
-        //        return uniqueFileName;
-        //     }
-
+            //private string ProcessUploadedFile()
+            //{
+            //    string uniqueFileName = null;
+            //    if (Photo != null)
+            //    {
+            //        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages");
+            //        if (!Directory.Exists(uploadsFolder))
+            //        {
+            //            Directory.CreateDirectory(uploadsFolder);
+            //        }
+            //        uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
+            //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
+            //        {
+            //            Photo.CopyTo(fileStream);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return "Default.jpg";
+            //    }
+            //    return uniqueFileName;
+            //}
     }
 }

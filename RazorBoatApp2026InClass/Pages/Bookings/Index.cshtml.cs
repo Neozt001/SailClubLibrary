@@ -7,15 +7,15 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
 {
     public class IndexModel : PageModel
     {
-        private IBookingRepository _repo;
+        private IBookingRepositoryAsync _repo;
         public List<Booking> Bookings { get; set; }
-        public IndexModel(IBookingRepository repo)
+        public IndexModel(IBookingRepositoryAsync repo)
         {
             _repo = repo;
         }
-        public void OnGet()
+        public async Task OnGet()
         {
-            Bookings = _repo.GetAllBookings();
+            Bookings = await _repo.GetAllBookings();
         }
 
     }

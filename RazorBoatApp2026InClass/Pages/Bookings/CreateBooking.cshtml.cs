@@ -7,9 +7,9 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
 {
     public class CreateBookingModel : PageModel
     {
-        private IBookingRepository _repo;
-        private IBoatRepository _bRepo;
-        private IMemberRepository _mRepo;
+        private IBookingRepositoryAsync _repo;
+        private IBoatRepositoryAsync _bRepo;
+        private IMemberRepositoryAsync _mRepo;
         [BindProperty]
         public Booking TheBooking { get; set; }
         [BindProperty]
@@ -17,32 +17,35 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
         [BindProperty]
         public Boat ChosenBoat { get; set; }
         [BindProperty]
-        public string PhoneNumber { get; set; }
+        public int MemberId { get; set; }
+        [BindProperty]
+        public int BoatId { get; set; }
         [BindProperty]
         public DateTime StartDate { get; set; }
         [BindProperty]
         public DateTime EndDate { get; set; }
-        public CreateBookingModel(IBookingRepository repo, IBoatRepository bRepo, IMemberRepository mRepo)
+        public CreateBookingModel(IBookingRepositoryAsync repo, IBoatRepositoryAsync bRepo, IMemberRepositoryAsync mRepo)
         {
 
             _repo = repo;
             _bRepo = bRepo;
             _mRepo = mRepo;
         }
-        public void OnGet(string sailNumber)
+        public async Task OnGet(int boatId)
         {
-            ChosenBoat = _bRepo.SearchBoat(sailNumber);
+            ChosenBoat = await _bRepo.SearchBoat(boatId);
+            BoatId = BoatId;
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
 
-            TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
+            TheBooking.TheMember = await _mRepo.SearchMember(MemberId);
             //TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
-            TheBooking.TheBoat = _bRepo.SearchBoat(SailNumber);
+            TheBooking.TheBoat = await _bRepo.SearchBoat(BoatId);
             TheBooking.StartDate = StartDate;
             TheBooking.EndDate = EndDate;
-            _repo.AddBooking(TheBooking);
+            await _repo.AddBooking(TheBooking);
             return RedirectToPage("Index");
         }
     }

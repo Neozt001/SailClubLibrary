@@ -14,11 +14,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SailClubLibrary\SailClubLibrary.csproj" />
+    <Content Remove="wwwroot\Images\MemberBoatImages\Default.jpg" />
+    <Content Remove="wwwroot\Images\MemberBoatImages\DefaultBoat.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\MemberImages\" />
+    <None Include="wwwroot\Images\MemberBoatImages\Default.jpg" />
+    <None Include="wwwroot\Images\MemberBoatImages\DefaultBoat.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SailClubLibrary\SailClubLibrary.csproj" />
   </ItemGroup>
 
 </Project>
