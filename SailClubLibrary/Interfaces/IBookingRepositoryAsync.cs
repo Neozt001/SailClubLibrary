@@ -13,7 +13,8 @@ namespace SailClubLibrary.Interfaces
         Task RemoveBooking(Booking b);
         Task<List<Booking>> GetAllBookings();
         Task UpdateBooking(Booking newBooking);
-        Task<int> GetBookingCountForMember(Member member);
-        Task<Dictionary<string, int>> GetAllBookingsForMembers();
+        Task<Booking?> SearchBooking(int id);
+        //Task<int> GetBookingCountForMember(Member member);
+        //Task<Dictionary<string, int>> GetAllBookingsForMembers();
     }
 }

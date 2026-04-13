@@ -1,0 +1,10 @@
+﻿@page
+@model RazorBoatApp2026InClass.Pages.WelcomeModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+<h1>Welcome to @Model.TheMember.FirstName</h1>
+
+<a asp-page="/Members/login" asp-page-handler="Logout">Logout</a>
+
+<h2>Bruger har id   @Model.TheMember.Id  og telefon @Model.TheMember.PhoneNumber </h2>

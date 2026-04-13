@@ -1,0 +1,32 @@
+﻿@page
+@model RazorBoatApp2026InClass.Pages.Bookings.EditBookingModel
+@{
+    ViewData["Title"] = "Edit a booking";
+}
+
+<h1>Edit</h1>
+<form method="post">
+    <input type="hidden" asp-for="BookingToUpdate.Id" />
+    <div class="form-group">
+        <label asp-for="@Model.BookingToUpdate.Destination" class="control-label"></label>
+        <input asp-for="@Model.BookingToUpdate.Destination" class="form-control" />
+    </div>
+    @* <div class="form-group">
+        <label asp-for="@Model.PhoneNumber" class="control-label"></label>
+        <input asp-for="@Model.PhoneNumber" class="form-control" />
+    </div> *@
+    <div class="form-group">
+        <label asp-for="@Model.BookingToUpdate.StartDate" class="control-label"></label>
+        <input asp-for="@Model.BookingToUpdate.StartDate" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.BookingToUpdate.EndDate" class="control-label"></label>
+        <input asp-for="@Model.BookingToUpdate.EndDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Edit booking" class="btn btn-primary" />
+    </div>
+
+
+</form>

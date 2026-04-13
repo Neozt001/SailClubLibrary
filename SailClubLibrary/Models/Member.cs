@@ -22,6 +22,7 @@ namespace SailClubLibrary.Models
         public MemberRole TheMemberRole { get; set; }
         public int Id { get; set; }
         public string Image { get; set; }
+        public string Password { get; set; }
         #endregion
 
         #region Constructor
@@ -34,7 +35,7 @@ namespace SailClubLibrary.Models
         {
 
         }
-        public Member(int id, string name, string surName, string phoneNumber, string address, string city, string mail, MemberType theMemberType, MemberRole theMemberRole, string image)
+        public Member(int id, string name, string surName, string phoneNumber, string address, string city, string mail, MemberType theMemberType, MemberRole theMemberRole, string image, string password)
         {
             FirstName = name;
             SurName = surName;
@@ -46,6 +47,7 @@ namespace SailClubLibrary.Models
             TheMemberRole = theMemberRole;
             Id = id;
             Image = image;
+            Password = password;
         }
 
         #endregion

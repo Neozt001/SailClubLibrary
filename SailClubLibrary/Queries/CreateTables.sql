@@ -28,11 +28,12 @@ CREATE TABLE Members(
 	Mail nvarchar(30) NOT NULL,
 	TheMemberType int NOT NULL,
 	TheMemberRole int NOT NULL,
-	Image nvarchar(100) NOT NULL DEFAULT 'Default.jpg'
+	Image nvarchar(100) NOT NULL DEFAULT 'Default.jpg',
+	Password nvarchar(16) NOT NULL DEFAULT '123'
 	);
 
 CREATE TABLE Bookings(
-	ID int IDENTITY(1,1) PRIMARY KEY,
+	ID int IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	StartDate date NOT NULL,
 	EndDate date NOT NULL,
 	Destination nvarchar(20) NOT NULL,

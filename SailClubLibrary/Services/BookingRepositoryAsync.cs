@@ -14,9 +14,9 @@ namespace SailClubLibrary.Services
     {
         #region Instance Field
         private string _queryCount = "SELECT COUNT(*) FROM Bookings";
-        private string _queryString = "SELECT b.ID AS BookingID, b.StartDate, b.EndDate, b.Destination, m.ID AS MemberID, m.FirstName, m.SurName, m.PhoneNumber, m.Address, m.City, m.Mail, m.TheMemberType, m.TheMemberRole, m.Image AS MemberImage, bo.ID AS BoatID, bo.SailNumber, bo.Model, bo.Draft, bo.Width, bo.Length, bo.YearOfConstruction, bo.EngineInfo, bo.TheBoatType, bo.Image AS BoatImage FROM Bookings b JOIN Members m ON b.Member_ID = m.ID JOIN Boats bo ON b.Boat_ID = bo.ID";
+        private string _queryString = "SELECT b.ID AS BookingID, b.StartDate, b.EndDate, b.Destination, m.ID AS MemberID, m.FirstName, m.SurName, m.PhoneNumber, m.Address, m.City, m.Mail, m.TheMemberType, m.TheMemberRole, m.Password, m.Image AS MemberImage, bo.ID AS BoatID, bo.SailNumber, bo.Model, bo.Draft, bo.Width, bo.Length, bo.YearOfConstruction, bo.EngineInfo, bo.TheBoatType, bo.Image AS BoatImage FROM Bookings b JOIN Members m ON b.Member_ID = m.ID JOIN Boats bo ON b.Boat_ID = bo.ID";
         private string _queryDelete = "DELETE FROM Bookings WHERE ID = @ID";
-        private string _searchSql = "SELECT * FROM Bookings WHERE ID = @ID";
+        private string _searchSql = "SELECT b.ID AS BookingID, b.StartDate, b.EndDate, b.Destination, m.ID AS MemberID, m.FirstName, m.SurName, m.PhoneNumber, m.Address, m.City, m.Mail, m.TheMemberType, m.TheMemberRole, m.Password, m.Image AS MemberImage, bo.ID AS BoatID, bo.SailNumber, bo.Model, bo.Draft, bo.Width, bo.Length, bo.YearOfConstruction, bo.EngineInfo, bo.TheBoatType, bo.Image AS BoatImage FROM Bookings b JOIN Members m ON b.Member_ID = m.ID JOIN Boats bo ON b.Boat_ID = bo.ID WHERE b.ID = @ID";
         private string _insertSql = @"INSERT INTO Bookings
             (StartDate, 
             EndDate, 
@@ -32,10 +32,16 @@ namespace SailClubLibrary.Services
             SET 
                 StartDate = @Start,
                 EndDate = @End,
-                Destination = @Dest,
-                Member_ID = @Member_ID,
-                Boat_ID = @Boat_ID,
+                Destination = @Dest
             WHERE ID = @ID";
+        //private string _queryUpdate = @"UPDATE Bookings
+        //    SET 
+        //        StartDate = @Start,
+        //        EndDate = @End,
+        //        Destination = @Dest,
+        //        Member_ID = @Member_ID,
+        //        Boat_ID = @Boat_ID,
+        //    WHERE ID = @ID";
         #endregion
         public async Task AddBooking(Booking booking)
         {
@@ -47,8 +53,8 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@Start", booking.StartDate);
                 command.Parameters.AddWithValue("@End", booking.EndDate);
                 command.Parameters.AddWithValue("@Dest", booking.Destination);
-                command.Parameters.AddWithValue("@Member_ID", booking.TheMember);
-                command.Parameters.AddWithValue("@Boat_ID", booking.TheBoat);
+                command.Parameters.AddWithValue("@Member_ID", booking.TheMember.Id);
+                command.Parameters.AddWithValue("@Boat_ID", booking.TheBoat.Id);
                 command.ExecuteNonQuery();
             }
         }
@@ -73,11 +79,58 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@Start", newBooking.StartDate);
                 command.Parameters.AddWithValue("@End", newBooking.EndDate);
                 command.Parameters.AddWithValue("@Dest", newBooking.Destination);
-                command.Parameters.AddWithValue("@Member_ID", newBooking.TheMember);
-                command.Parameters.AddWithValue("@Boat_ID", newBooking.TheBoat);
+                //command.Parameters.AddWithValue("@Member_ID", newBooking.TheMember);
+                //command.Parameters.AddWithValue("@Boat_ID", newBooking.TheBoat);
                 await command.ExecuteNonQueryAsync();
             }
         }
+        public async Task<Booking?> SearchBooking(int id)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                Booking booking = new Booking();
+
+                SqlCommand command = new SqlCommand(_searchSql, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@ID", id);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    int bookingId = reader.GetInt32("BookingID");
+                    DateTime start = reader.GetDateTime("StartDate");
+                    DateTime end = reader.GetDateTime("EndDate");
+                    string dest = reader.GetString("Destination");
+
+                    Member member = new Member(
+                        reader.GetInt32("MemberID"),
+                        reader.GetString("FirstName"),
+                        reader.GetString("SurName"),
+                        reader.GetString("PhoneNumber"),
+                        reader.GetString("Address"),
+                        reader.GetString("City"),
+                        reader.GetString("Mail"),
+                        (MemberType)reader.GetInt32("TheMemberType"),
+                        (MemberRole)reader.GetInt32("TheMemberRole"),
+                        reader.GetString("MemberImage"),
+                        reader.GetString("Password"));
+
+                    Boat boat = new Boat(
+                        reader.GetInt32("BoatID"),
+                        reader.GetString("SailNumber"),
+                        reader.GetString("Model"),
+                        reader.GetDouble("Draft"),
+                        reader.GetDouble("Width"),
+                        reader.GetDouble("Length"),
+                        reader.GetString("YearOfConstruction"),
+                        reader.GetString("EngineInfo"),
+                        (BoatType)reader.GetInt32("TheBoatType"),
+                        reader.GetString("BoatImage"));
+                    return new Booking(bookingId, start, end, dest, member, boat);
+                }
+                return null;
+            }
+        }
+
         public async Task<List<Booking>> GetAllBookings()
         {
             List<Booking> foundBookings = new List<Booking>();
@@ -88,13 +141,13 @@ namespace SailClubLibrary.Services
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
                 {
-                    int bookingId = reader.GetInt32("ID");
+                    int bookingId = reader.GetInt32("BookingID");
                     DateTime start = reader.GetDateTime("StartDate");
                     DateTime end = reader.GetDateTime("EndDate");
                     string dest = reader.GetString("Destination");
 
                     Member member = new Member(
-                        reader.GetInt32("MemberId"), 
+                        reader.GetInt32("MemberID"), 
                         reader.GetString("FirstName"), 
                         reader.GetString("SurName"), 
                         reader.GetString("PhoneNumber"), 
@@ -103,10 +156,11 @@ namespace SailClubLibrary.Services
                         reader.GetString("Mail"), 
                         (MemberType)reader.GetInt32("TheMemberType"), 
                         (MemberRole)reader.GetInt32("TheMemberRole"), 
-                        reader.GetString("MemberImage"));
+                        reader.GetString("MemberImage"),
+                        reader.GetString("Password"));
 
                     Boat boat = new Boat(
-                        reader.GetInt32("BoatId"),
+                        reader.GetInt32("BoatID"),
                         reader.GetString("SailNumber"),
                         reader.GetString("Model"),
                         reader.GetDouble("Draft"),
@@ -120,25 +174,10 @@ namespace SailClubLibrary.Services
 
                     foundBookings.Add(booking);
                 }
-                reader.Close();
             }
             //Console.WriteLine(foundMembers.Count);
             //Console.ReadKey();
             return foundBookings;
         }
-
-        public async Task<Dictionary<string, int>> GetAllBookingsForMembers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<int> GetBookingCountForMember(Member member)
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
-        
     }
 }

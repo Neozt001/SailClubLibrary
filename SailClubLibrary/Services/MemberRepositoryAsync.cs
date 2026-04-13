@@ -15,7 +15,7 @@ namespace SailClubLibrary.Services
         //private string _queryCount = "COUNT(*) FROM Members";
         private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
-        private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole, @Image)";
+        private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole, @Image, @Password)";
         private string _queryDelete = "DELETE FROM Members WHERE ID = @ID";
         private string _queryUpdate = "UPDATE Members " +
             " SET FirstName = @FirstName," +
@@ -27,8 +27,11 @@ namespace SailClubLibrary.Services
             " TheMemberType = @TheMemberType," +
             " TheMemberRole = @TheMemberRole, " +
             " Image = @Image" +
+            " Password = @Password" +
             " WHERE ID = @ID";
         private string _searchSql = "SELECT * FROM Members WHERE ID = @ID";
+        private string _searchByPhoneSql = "SELECT * FROM Members WHERE PhoneNumber = @PhoneNumber";
+        private string _verifySql = "SELECT * FROM Members WHERE PhoneNumber = @PhoneNumber AND Password = @Password";
 
         //int IMemberRepository.Count => throw new NotImplementedException();
 
@@ -80,6 +83,7 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@TheMemberType", member.TheMemberType);
                 command.Parameters.AddWithValue("@TheMemberRole", member.TheMemberRole);
                 command.Parameters.AddWithValue("@Image", member.Image);
+                command.Parameters.AddWithValue("@Password", member.Password);
                 command.ExecuteNonQuery();
             }
         }
@@ -112,6 +116,7 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@TheMemberType", updatedMember.TheMemberType);
                 command.Parameters.AddWithValue("@TheMemberRole", updatedMember.TheMemberRole);
                 command.Parameters.AddWithValue("@Image", updatedMember.Image);
+                command.Parameters.AddWithValue("@Password", updatedMember.Password);
                 //int numberOfRow = command.ExecuteNonQuery();
                 await command.ExecuteNonQueryAsync();
             }
@@ -139,13 +144,68 @@ namespace SailClubLibrary.Services
                     MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("TheMemberType")];
                     MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("TheMemberRole")];
                     string image = reader.GetString("Image");
-                    member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image);
-                    reader.Close();
+                    string password = reader.GetString("Password");
+                    return new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image, password);
                 }
-
-                return member;
+                return null;
             }
-            return null;
+        }
+        public async Task<Member?> SearchMemberByPhone(string phone)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                Member member = new Member();
+
+                SqlCommand command = new SqlCommand(_searchByPhoneSql, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@PhoneNumber", phone);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    int memberId = reader.GetInt32("ID");
+                    string firstName = reader.GetString("FirstName");
+                    string surName = reader.GetString("SurName");
+                    string phoneNumber = reader.GetString("PhoneNumber");
+                    string memberAddress = reader.GetString("Address");
+                    string city = reader.GetString("City");
+                    string mail = reader.GetString("Mail");
+                    MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("TheMemberType")];
+                    MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("TheMemberRole")];
+                    string image = reader.GetString("Image");
+                    string password = reader.GetString("Password");
+                    return new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image, password);
+                }
+                return null;
+            }
+        }
+        public async Task<Member?> VerifyMember(string phone, string password)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //Member member = new Member();
+
+                SqlCommand command = new SqlCommand(_verifySql, connection);
+                await command.Connection.OpenAsync();
+                command.Parameters.AddWithValue("@PhoneNumber", phone);
+                command.Parameters.AddWithValue("@Password", password);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    int memberId = reader.GetInt32("ID");
+                    string firstName = reader.GetString("FirstName");
+                    string surName = reader.GetString("SurName");
+                    string phoneNumber = reader.GetString("PhoneNumber");
+                    string memberAddress = reader.GetString("Address");
+                    string city = reader.GetString("City");
+                    string mail = reader.GetString("Mail");
+                    MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("TheMemberType")];
+                    MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("TheMemberRole")];
+                    string image = reader.GetString("Image");
+                    string pass = reader.GetString("Password");
+                    return new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image, pass);
+                }
+                return null;
+            }
         }
         /// <summary>
         /// Method for returning a list of members
@@ -170,7 +230,8 @@ namespace SailClubLibrary.Services
                     MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("TheMemberType")];
                     MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("TheMemberRole")];
                     string image = reader.GetString("Image");
-                    Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image);
+                    string password = reader.GetString("Image");
+                    Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image, password);
 
                     foundMembers.Add(member);
                 }

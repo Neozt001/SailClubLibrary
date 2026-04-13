@@ -23,8 +23,8 @@ VALUES ('16-1111', '1', 20, 10, 30, 1980, 'Good', 1, DEFAULT),
 USE SailClubDatabase;
 GO
 INSERT INTO Members
-VALUES ('Poul', 'Hansen', '10101010', 'Gade 123', 'København', 'Mail01@gmail.dk', 1, 1, DEFAULT),
-('Per', 'Hansen', '20202020', 'Gade 123', 'København', 'Mail02@gmail.dk', 2, 2, DEFAULT );
+VALUES ('Poul', 'Hansen', '10101010', 'Gade 123', 'København', 'Mail01@gmail.dk', 1, 1, DEFAULT, DEFAULT),
+('Per', 'Hansen', '20202020', 'Gade 123', 'København', 'Mail02@gmail.dk', 2, 2, DEFAULT, DEFAULT);
 
 INSERT INTO Bookings
 VALUES ('2020-01-01', '2020-02-02', 'Destination A', 1, 1);

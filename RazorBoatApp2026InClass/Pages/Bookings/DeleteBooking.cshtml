@@ -1,0 +1,15 @@
+﻿@page
+@model RazorBoatApp2026InClass.Pages.Bookings.DeleteBookingModel
+@{
+    ViewData["Title"] = "Delete booking";
+}
+
+<h1>Delete member</h1>
+<form method="post">
+    @* <label>Member Id</label>: @Model.DeleteMember.Id <br/> *@
+    <label>Booking Id</label>: @Model.DeleteBooking.Id <br />
+    <label>Booking Member</label>: @Model.DeleteBooking.TheMember <br />
+    <input type="submit" asp-page-handler="Delete" asp-route-id="@Model.DeleteBooking.Id" class="btn btn-danger" value="Delete Booking" />
+    <input type="submit" class="btn btn-warning" value="Cancel" />
+
+</form>

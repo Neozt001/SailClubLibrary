@@ -31,6 +31,8 @@
                 <td>@item.Destination</td>
                 <td>@item.StartDate</td>
                 <td>@item.EndDate</td>
+                <td><a asp-page="DeleteBooking" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="EditBooking" asp-route-id="@item.Id">Edit</a></td>
             </tr>
         }
     </tbody>
