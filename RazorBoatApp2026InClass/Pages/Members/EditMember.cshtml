@@ -16,34 +16,42 @@
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.FirstName" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.FirstName" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.FirstName" class="text-danger"></span>
     </div>                     
     <div class="form-group">   
         <label asp-for="@Model.MemberToUpdate.SurName" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.SurName" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.SurName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.PhoneNumber" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.PhoneNumber" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.PhoneNumber" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.Address" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.Address" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.Address" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.City" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.City" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.City" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.Mail" class="control-label"> </label>
         <input asp-for="@Model.MemberToUpdate.Mail" class="form-control" />
+        <span asp-validation-for="@Model.MemberToUpdate.Mail" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.MemberToUpdate.TheMemberType" class="control-label"></label>
         <select asp-for="@Model.MemberToUpdate.TheMemberType" asp-items="Html.GetEnumSelectList<MemberType>()"></select>
+        <span asp-validation-for="@Model.MemberToUpdate.TheMemberType" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="@Model.MemberToUpdate.TheMemberRole" class="control-label"></label>
         <select asp-for="@Model.MemberToUpdate.TheMemberRole" asp-items="Html.GetEnumSelectList<MemberRole>()"></select>
+        <span asp-validation-for="@Model.MemberToUpdate.TheMemberRole" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="@Model.Photo" class="control-label"></label>

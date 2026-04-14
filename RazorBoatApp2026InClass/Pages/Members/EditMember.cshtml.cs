@@ -49,7 +49,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
                     theImage = Constants.DefaultMemberImage;
                 }
             }
-            if(HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id)
+            if(HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
             {
                 Message = "Du kan ikke ændre denne bruger";
                 return Page();
@@ -58,10 +58,16 @@ namespace RazorBoatApp2026InClass.Pages.Members
             MemberToUpdate.Password = HttpContext.Session.GetString("Password")!;
             await _repo.UpdateMember(MemberToUpdate);
             return RedirectToPage("index");
+            
         }
         public IActionResult OnPostDelete()
         {
-            return RedirectToPage("Index");
+            if (HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
+            {
+                Message = "Du kan ikke Slette denne bruger";
+                return Page();
+            }
+            return RedirectToPage("DeleteMember");
         }
     }
 }
