@@ -23,6 +23,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
         public async Task<IActionResult> OnPostDelete(int id)
         {
             Member? m = await _repo.SearchMember(id);
+            
             await _repo.RemoveMember(m);
             return RedirectToPage("index");
         }

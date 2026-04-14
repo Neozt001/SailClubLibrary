@@ -26,7 +26,8 @@ namespace RazorBoatApp2026InClass.Pages.Members
 
         public void OnGetLogout()
         {
-            HttpContext.Session.Remove("PhoneNumber");
+            //HttpContext.Session.Remove("PhoneNumber");
+            HttpContext.Session.Clear();
         }
 
         public async Task<IActionResult> OnPost()
@@ -41,7 +42,10 @@ namespace RazorBoatApp2026InClass.Pages.Members
             
             if (user != null)
             {
+                HttpContext.Session.SetInt32("ID", user.Id);
                 HttpContext.Session.SetString("PhoneNumber", user.PhoneNumber);
+                HttpContext.Session.SetString("Password", user.Password);
+                HttpContext.Session.SetInt32("MemberRole", (int)user.TheMemberRole);
                 return RedirectToPage("/Welcome");
             }
             else

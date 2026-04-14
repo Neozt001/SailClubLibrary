@@ -1,7 +1,7 @@
 ﻿--DROP DATABASE IF EXISTS SailClubDatabase
 --CREATE DATABASE SailClubDatabase 
 --USE SailClubDatabase;
---GO
+----GO
 --DROP TABLE IF EXISTS Bookings;
 --DROP TABLE IF EXISTS Boats;
 --DROP TABLE IF EXISTS Members;

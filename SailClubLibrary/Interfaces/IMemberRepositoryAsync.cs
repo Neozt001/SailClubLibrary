@@ -9,8 +9,6 @@ namespace SailClubLibrary.Interfaces
 {
     public interface IMemberRepositoryAsync
     {
-        //Task<int> Count { get; }
-        //Task<int> Count();
         Task<int> Count { get; }
         Task AddMember(Member member);
         Task RemoveMember(Member member);

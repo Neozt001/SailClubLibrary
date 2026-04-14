@@ -33,7 +33,6 @@ namespace SailClubLibrary.Models
 
         public Member()
         {
-
         }
         public Member(int id, string name, string surName, string phoneNumber, string address, string city, string mail, MemberType theMemberType, MemberRole theMemberRole, string image, string password)
         {

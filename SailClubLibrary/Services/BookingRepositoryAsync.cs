@@ -130,7 +130,6 @@ namespace SailClubLibrary.Services
                 return null;
             }
         }
-
         public async Task<List<Booking>> GetAllBookings()
         {
             List<Booking> foundBookings = new List<Booking>();
@@ -175,8 +174,6 @@ namespace SailClubLibrary.Services
                     foundBookings.Add(booking);
                 }
             }
-            //Console.WriteLine(foundMembers.Count);
-            //Console.ReadKey();
             return foundBookings;
         }
     }

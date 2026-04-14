@@ -52,7 +52,7 @@
             <label class="custom-file-label">Gem ny Billede</label>
         </div>
     </div>
-
+    @Model.Message
     <div class="form-group">
         <input type="submit" asp-page-handler="Update" asp-route-id="@Model.MemberToUpdate.Id" value="Update Member" class="btn btn-primary" />
     </div>

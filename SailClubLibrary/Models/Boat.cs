@@ -21,7 +21,6 @@ namespace SailClubLibrary.Models
         public int Id { get; set; }
         public BoatType TheBoatType { get; set; }
         public string Model { get; set; }
-        //[Required]
         public string SailNumber { get; set; }
         public string EngineInfo { get; set; }
         public double Draft { get; set; }
@@ -33,7 +32,6 @@ namespace SailClubLibrary.Models
         #endregion
         public Boat()
         {
-
         }
 
         #region Constructor

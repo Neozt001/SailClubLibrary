@@ -12,7 +12,6 @@ namespace SailClubLibrary.Services
     public class MemberRepositoryAsync : Connection, IMemberRepositoryAsync
     {
         #region Instance Fields
-        //private string _queryCount = "COUNT(*) FROM Members";
         private string _queryCount = "SELECT COUNT(*) FROM Members";
         private string _queryString = "SELECT * FROM Members";
         private string _insertSql = "INSERT INTO Members Values(@FirstName, @SurName, @PhoneNumber, @Address, @City, @Mail, @TheMemberType, @TheMemberRole, @Image, @Password)";
@@ -26,23 +25,17 @@ namespace SailClubLibrary.Services
             " Mail = @Mail," +
             " TheMemberType = @TheMemberType," +
             " TheMemberRole = @TheMemberRole, " +
-            " Image = @Image" +
+            " Image = @Image," +
             " Password = @Password" +
             " WHERE ID = @ID";
         private string _searchSql = "SELECT * FROM Members WHERE ID = @ID";
         private string _searchByPhoneSql = "SELECT * FROM Members WHERE PhoneNumber = @PhoneNumber";
         private string _verifySql = "SELECT * FROM Members WHERE PhoneNumber = @PhoneNumber AND Password = @Password";
-
-        //int IMemberRepository.Count => throw new NotImplementedException();
-
-
         #region Properties
         /// <summary>
         /// Count used for counting members in _members repository
         /// </summary>
         public Task<int> Count { get { return GetCount(); } }
-        //public int Count { get { return _members.Count; } }
-
         #endregion
 
         #region Constructor
@@ -53,10 +46,7 @@ namespace SailClubLibrary.Services
         {
         }
         #endregion
-
         #region Methods
-
-
         public async Task<int> GetCount()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -73,7 +63,6 @@ namespace SailClubLibrary.Services
             {
                 SqlCommand command = new SqlCommand(_insertSql, connection);
                 await command.Connection.OpenAsync();
-                //command.Parameters.AddWithValue("@ID", member.Id);
                 command.Parameters.AddWithValue("@FirstName", member.FirstName);
                 command.Parameters.AddWithValue("@SurName", member.SurName);
                 command.Parameters.AddWithValue("@PhoneNumber", member.PhoneNumber);
@@ -94,7 +83,6 @@ namespace SailClubLibrary.Services
                 SqlCommand command = new SqlCommand(_queryDelete, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@ID", member.Id);
-                //int numberOfRows = await command.ExecuteNonQueryAsync();
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -105,7 +93,6 @@ namespace SailClubLibrary.Services
 
                 SqlCommand command = new SqlCommand(_queryUpdate, connection);
                 await command.Connection.OpenAsync();
-                //command.Parameters.AddWithValue("@ID", updatedMember.Id);
                 command.Parameters.AddWithValue("@ID", updatedMember.Id);
                 command.Parameters.AddWithValue("@FirstName", updatedMember.FirstName);
                 command.Parameters.AddWithValue("@SurName", updatedMember.SurName);
@@ -117,17 +104,14 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@TheMemberRole", updatedMember.TheMemberRole);
                 command.Parameters.AddWithValue("@Image", updatedMember.Image);
                 command.Parameters.AddWithValue("@Password", updatedMember.Password);
-                //int numberOfRow = command.ExecuteNonQuery();
                 await command.ExecuteNonQueryAsync();
             }
         }
-        
         public async Task<Member?> SearchMember(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 Member member = new Member();
-
                 SqlCommand command = new SqlCommand(_searchSql, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@ID", id);
@@ -155,7 +139,6 @@ namespace SailClubLibrary.Services
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 Member member = new Member();
-
                 SqlCommand command = new SqlCommand(_searchByPhoneSql, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@PhoneNumber", phone);
@@ -182,8 +165,6 @@ namespace SailClubLibrary.Services
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                //Member member = new Member();
-
                 SqlCommand command = new SqlCommand(_verifySql, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@PhoneNumber", phone);
@@ -230,15 +211,13 @@ namespace SailClubLibrary.Services
                     MemberType memberType = Enum.GetValues<MemberType>()[reader.GetInt32("TheMemberType")];
                     MemberRole memberRole = Enum.GetValues<MemberRole>()[reader.GetInt32("TheMemberRole")];
                     string image = reader.GetString("Image");
-                    string password = reader.GetString("Image");
+                    string password = reader.GetString("Password");
                     Member member = new Member(memberId, firstName, surName, phoneNumber, memberAddress, city, mail, memberType, memberRole, image, password);
 
                     foundMembers.Add(member);
                 }
                 reader.Close();
             }
-            //Console.WriteLine(foundMembers.Count);
-            //Console.ReadKey();
             return foundMembers;
         }
         public async Task<List<Member>> FilterMembers(string filterCriteria)

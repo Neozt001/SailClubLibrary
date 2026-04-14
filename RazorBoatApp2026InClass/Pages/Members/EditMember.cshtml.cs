@@ -16,6 +16,8 @@ namespace RazorBoatApp2026InClass.Pages.Members
 
         [BindProperty]
         public IFormFile Photo { get; set; }
+
+        public string Message { get; set; }
         //public string MemberPhone { get; set; }
         public EditMemberModel(IMemberRepositoryAsync repo, IWebHostEnvironment webHost)
         {
@@ -47,7 +49,13 @@ namespace RazorBoatApp2026InClass.Pages.Members
                     theImage = Constants.DefaultMemberImage;
                 }
             }
+            if(HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id)
+            {
+                Message = "Du kan ikke ændre denne bruger";
+                return Page();
+            }
             MemberToUpdate.Image = theImage;
+            MemberToUpdate.Password = HttpContext.Session.GetString("Password")!;
             await _repo.UpdateMember(MemberToUpdate);
             return RedirectToPage("index");
         }

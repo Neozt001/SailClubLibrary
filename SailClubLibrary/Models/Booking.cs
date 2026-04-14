@@ -30,8 +30,7 @@ namespace SailClubLibrary.Models
         #endregion
         #region Constructor
         public Booking()
-        {
-            
+        {   
         }
         public Booking(int id, DateTime startDate, DateTime endDate, string destination, Member member, Boat boat)
         {

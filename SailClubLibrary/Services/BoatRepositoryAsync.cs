@@ -55,7 +55,6 @@ namespace SailClubLibrary.Services
         #endregion
 
         #region Properties
-        //public int Count { get { return _boats.Count; } }
         public Task<int> Count { get { return GetCount(); } }
         #endregion  
 
@@ -95,13 +94,8 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@EngineInfo", boat.EngineInfo);
                 command.Parameters.AddWithValue("@BoatType", boat.TheBoatType);
                 command.Parameters.AddWithValue("@Image", boat.Image);
-                //int numberOfRow = command.ExecuteNonQuery();
                 command.ExecuteNonQuery();
-                //Thread.Sleep(1000);
-                //return numberOfRow == 1;
-                //return member;
             }
-            //return false;
         }
 
         /// <summary>
@@ -132,15 +126,11 @@ namespace SailClubLibrary.Services
                 }
                 reader.Close();
             }
-            //Console.WriteLine(foundMembers.Count);
-            //Console.ReadKey();
             return foundBoats;
         }
-
         /// <summary>
         /// Removes a Boat Object from the Dictionary
         /// </summary>
-        /// 
         public async Task RemoveBoat(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -148,11 +138,9 @@ namespace SailClubLibrary.Services
                 SqlCommand command = new SqlCommand(_queryDelete, connection);
                 await command.Connection.OpenAsync();
                 command.Parameters.AddWithValue("@ID", id);
-                //int numberOfRows = await command.ExecuteNonQueryAsync();
                 await command.ExecuteNonQueryAsync();
             }
         }
-
         /// <summary>
         /// Updates the info of a Boat Object found by parameter with input info
         /// </summary>
@@ -173,11 +161,9 @@ namespace SailClubLibrary.Services
                 command.Parameters.AddWithValue("@EngineInfo", updatedBoat.EngineInfo);
                 command.Parameters.AddWithValue("@BoatType", updatedBoat.TheBoatType);
                 command.Parameters.AddWithValue("@Image", updatedBoat.Image);
-                //int numberOfRow = command.ExecuteNonQuery();
                 await command.ExecuteNonQueryAsync();
             }
         }
-
         /// <summary>
         /// Searches through the boat dictionary and returns the boat with the given sailnumber. 
         /// </summary>
@@ -206,10 +192,8 @@ namespace SailClubLibrary.Services
                     boat = new Boat(boatId, sailNumber, model, draft, width, length, yearOfConstruction, engineInfo, boatType, image);
                     reader.Close();
                 }
-
                 return boat;
             }
-            return null;
         }
         public async Task<List<Boat>> FilterBoats(string filterCriteria)
         {

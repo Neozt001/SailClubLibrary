@@ -31,10 +31,8 @@ namespace RazorBoatApp2026InClass.Pages.Members
         }
         public async Task OnGet()
         {
-
             try
             {
-                //Members = MemberFilter(_repo.GetAllMembers());
                 Members = await _repo.GetAllMembers();
 
             }
