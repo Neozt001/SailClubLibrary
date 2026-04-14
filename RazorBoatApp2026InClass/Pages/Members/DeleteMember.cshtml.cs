@@ -29,13 +29,22 @@ namespace RazorBoatApp2026InClass.Pages.Members
                 int? sessionID = HttpContext.Session.GetInt32("ID");
                 int? sessionRoleValue = HttpContext.Session.GetInt32("MemberRole");
                 bool isAdmin = sessionRoleValue.HasValue && (MemberRole)sessionRoleValue == MemberRole.Admin;
-                if (sessionID != m.Id && isAdmin)
+                if (!sessionID.HasValue)
                 {
-                    Message = "Du kan ikke ændre denne bruger";
+                    Message = "For at slette skal du logge ind";
                     return Page();
                 }
-                await _repo.RemoveMember(m);
-                return RedirectToPage("index");
+                if (isAdmin || sessionID == m.Id)
+                {
+                    await _repo.RemoveMember(m);
+                    return RedirectToPage("index");
+                }
+                else
+                {
+                    Message = "Du kan ikke slette denne bruger";
+                    return Page();
+                }
+                
             }
             Message = "Brugeren kunne ikke findes";
             return Page();
