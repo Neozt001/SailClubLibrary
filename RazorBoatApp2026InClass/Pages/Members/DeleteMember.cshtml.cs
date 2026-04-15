@@ -34,9 +34,10 @@ namespace RazorBoatApp2026InClass.Pages.Members
                     Message = "For at slette skal du logge ind";
                     return Page();
                 }
-                if (isAdmin || sessionID == m.Id)
+                else if (sessionID == m.Id)
                 {
                     await _repo.RemoveMember(m);
+                    HttpContext.Session.Clear();
                     return RedirectToPage("index");
                 }
                 else
