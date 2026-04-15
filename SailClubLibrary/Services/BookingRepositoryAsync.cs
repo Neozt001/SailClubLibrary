@@ -43,6 +43,11 @@ namespace SailClubLibrary.Services
         //        Boat_ID = @Boat_ID,
         //    WHERE ID = @ID";
         #endregion
+        /// <summary>
+        /// Add a booking record from the Bookings table using a booking an object and executing an SQL command
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
         public async Task AddBooking(Booking booking)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -58,6 +63,11 @@ namespace SailClubLibrary.Services
                 command.ExecuteNonQuery();
             }
         }
+        /// <summary>
+        /// Removes a booking record from the Bookings table using an object and executing an SQL command
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
         public async Task RemoveBooking(Booking booking)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -68,6 +78,11 @@ namespace SailClubLibrary.Services
                 await command.ExecuteNonQueryAsync();
             }
         }
+        /// <summary>
+        /// Updates a booking record from the Bookings table an object and executing an SQL command
+        /// </summary>
+        /// <param name="newBooking"></param>
+        /// <returns></returns>
         public async Task UpdateBooking(Booking newBooking)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -84,6 +99,11 @@ namespace SailClubLibrary.Services
                 await command.ExecuteNonQueryAsync();
             }
         }
+        /// <summary>
+        /// Searches for a booking object by ID by executing an SQL command
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns a booking object </returns>
         public async Task<Booking?> SearchBooking(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -130,6 +150,10 @@ namespace SailClubLibrary.Services
                 return null;
             }
         }
+        /// <summary>
+        /// Retrieves a list of all booking records in table Bookings by executing an SQL command
+        /// </summary>
+        /// <returns>Returns an async Task which result is a List of bookings</returns>
         public async Task<List<Booking>> GetAllBookings()
         {
             List<Booking> foundBookings = new List<Booking>();

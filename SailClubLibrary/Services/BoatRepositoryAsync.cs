@@ -13,9 +13,6 @@ using System.Threading.Tasks;
 
 namespace SailClubLibrary.Services
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class BoatRepositoryAsync : Connection, IBoatRepositoryAsync
     {
         #region Instance Field
@@ -53,19 +50,17 @@ namespace SailClubLibrary.Services
             " Image = @Image " +
             " WHERE ID = @ID";
         #endregion
-
-
+        /// <summary>
+        /// Returns the number of boats in the list
+        /// </summary>
         public Task<int> Count { get { return GetCount(); } }
-         
-
-        
         public BoatRepositoryAsync()
         {
         }
         /// <summary>
-        /// 
+        /// Facilitets the implementation of the Count property
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns a Task which the result is an integer</returns>
         public async Task<int> GetCount()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -77,7 +72,7 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// 
+        /// Adds a Boat object to the table Boats by executing an SQL command 
         /// </summary>
         /// <param name="boat"></param>
         /// <returns></returns>
@@ -102,9 +97,9 @@ namespace SailClubLibrary.Services
         }
 
         /// <summary>
-        /// 
+        /// Retrieves a list of all boat records in table Boats by executing an SQL command
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns an async Task which result is a List of boats</returns>
         public async Task<List<Boat>> GetAllBoats()
         {
             List<Boat> foundBoats = new List<Boat>();
@@ -133,7 +128,7 @@ namespace SailClubLibrary.Services
             return foundBoats;
         }
         /// <summary>
-        /// 
+        /// Removes a boat record from the table Boats by ID by executing an SQL command
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -148,7 +143,7 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// 
+        /// Updates a boat record in the table Boats by using a boat object by executing an SQL command
         /// </summary>
         /// <param name="updatedBoat"></param>
         /// <returns></returns>
@@ -173,10 +168,10 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// 
+        /// Searchs for a boat object by ID by executing an SQL command 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Boat object</returns>
         public async Task<Boat?> SearchBoat(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))

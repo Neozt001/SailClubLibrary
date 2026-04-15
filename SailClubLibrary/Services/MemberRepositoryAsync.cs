@@ -6,9 +6,6 @@ using System.Text;
 
 namespace SailClubLibrary.Services
 {
-    /// <summary>
-    /// Class for Constructing and calling Member Repository Objects using the interface
-    /// </summary>
     public class MemberRepositoryAsync : Connection, IMemberRepositoryAsync
     {
         #region Instance Fields
@@ -33,20 +30,21 @@ namespace SailClubLibrary.Services
         private string _verifySql = "SELECT * FROM Members WHERE PhoneNumber = @PhoneNumber AND Password = @Password";
         #region Properties
         /// <summary>
-        /// Count used for counting members in _members repository
+        /// Returns the number of Members in the list
         /// </summary>
         public Task<int> Count { get { return GetCount(); } }
         #endregion
 
         #region Constructor
-        /// <summary>
-        /// MemberRepository constructor used for making a new member repository called _members with string as key and IMember as value
-        /// </summary>
         public MemberRepositoryAsync()
         {
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Facilitets the implementation of the Count property
+        /// </summary>
+        /// <returns>Returns a Task which the result is an integer</returns>
         public async Task<int> GetCount()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -57,6 +55,11 @@ namespace SailClubLibrary.Services
                 return Convert.ToInt32(result);
             }
         }
+        /// <summary>
+        /// Adds a Member object to the table Members by executing an SQL command 
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         public async Task AddMember(Member member)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -76,6 +79,11 @@ namespace SailClubLibrary.Services
                 command.ExecuteNonQuery();
             }
         }
+        /// <summary>
+        /// Removes a member record from the table Members by using a Member object and executing an SQL command
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         public async Task RemoveMember(Member member)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -86,6 +94,11 @@ namespace SailClubLibrary.Services
                 await command.ExecuteNonQueryAsync();
             }
         }
+        /// <summary>
+        /// Updates a member record in the table Members by using a member object and executing an SQL command
+        /// </summary>
+        /// <param name="updatedMember"></param>
+        /// <returns></returns>
         public async Task UpdateMember(Member updatedMember)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -107,6 +120,11 @@ namespace SailClubLibrary.Services
                 await command.ExecuteNonQueryAsync();
             }
         }
+        /// <summary>
+        /// Searchs for a member object by ID and executing an SQL command 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Member object</returns>
         public async Task<Member?> SearchMember(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -134,6 +152,11 @@ namespace SailClubLibrary.Services
                 return null;
             }
         }
+        /// <summary>
+        /// Searchs for a member object by phone and executing an SQL command 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Member object</returns>
         public async Task<Member?> SearchMemberByPhone(string phone)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -161,6 +184,12 @@ namespace SailClubLibrary.Services
                 return null;
             }
         }
+        /// <summary>
+        /// Verifies a member object by phone, password and then executing an SQL command 
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <param name="password"></param>
+        /// <returns>Member object</returns>
         public async Task<Member?> VerifyMember(string phone, string password)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -189,8 +218,9 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// Method for returning a list of members
+        /// Retrieves a list of all member records in table Members by executing an SQL command
         /// </summary>
+        /// <returns>Returns an async Task which result is a List of Members</returns>
         public async Task<List<Member>> GetAllMembers()
         {
             List<Member> foundMembers = new List<Member>();
