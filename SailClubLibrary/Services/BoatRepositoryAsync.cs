@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace SailClubLibrary.Services
 {
     /// <summary>
-    /// Class for Constructing and calling Boat Repository Objects using the interface
+    /// 
     /// </summary>
     public class BoatRepositoryAsync : Connection, IBoatRepositoryAsync
     {
@@ -54,17 +54,18 @@ namespace SailClubLibrary.Services
             " WHERE ID = @ID";
         #endregion
 
-        #region Properties
-        public Task<int> Count { get { return GetCount(); } }
-        #endregion  
 
-        #region Constructor
+        public Task<int> Count { get { return GetCount(); } }
+         
+
+        
         public BoatRepositoryAsync()
         {
         }
-        #endregion
-
-        #region Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<int> GetCount()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -76,8 +77,10 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// Adds a Boat Object to the Dictionary. 
+        /// 
         /// </summary>
+        /// <param name="boat"></param>
+        /// <returns></returns>
         public async Task AddBoat(Boat boat)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -99,8 +102,9 @@ namespace SailClubLibrary.Services
         }
 
         /// <summary>
-        /// Collects all the Boats Objects in the Dictionary and files them into a list
+        /// 
         /// </summary>
+        /// <returns></returns>
         public async Task<List<Boat>> GetAllBoats()
         {
             List<Boat> foundBoats = new List<Boat>();
@@ -129,8 +133,10 @@ namespace SailClubLibrary.Services
             return foundBoats;
         }
         /// <summary>
-        /// Removes a Boat Object from the Dictionary
+        /// 
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task RemoveBoat(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -142,8 +148,10 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// Updates the info of a Boat Object found by parameter with input info
+        /// 
         /// </summary>
+        /// <param name="updatedBoat"></param>
+        /// <returns></returns>
         public async Task UpdateBoat(Boat updatedBoat)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -165,8 +173,10 @@ namespace SailClubLibrary.Services
             }
         }
         /// <summary>
-        /// Searches through the boat dictionary and returns the boat with the given sailnumber. 
+        /// 
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Boat?> SearchBoat(int id)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -195,6 +205,11 @@ namespace SailClubLibrary.Services
                 return boat;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filterCriteria"></param>
+        /// <returns></returns>
         public async Task<List<Boat>> FilterBoats(string filterCriteria)
         {
             List<Boat> bList = [];
@@ -208,5 +223,4 @@ namespace SailClubLibrary.Services
             return bList;
         }
     }
-        #endregion
 }
