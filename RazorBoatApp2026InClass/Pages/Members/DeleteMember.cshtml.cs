@@ -42,7 +42,8 @@ namespace RazorBoatApp2026InClass.Pages.Members
                 else
                 {
                     Message = "Du kan ikke slette denne bruger";
-                    return Page();
+                    DeleteMember = m;
+                    return RedirectToPage("index");
                 }
                 
             }
