@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorBoatApp2026InClass.Helpers;
+using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -26,7 +27,20 @@ namespace RazorBoatApp2026InClass.Pages.Members
         }
         public async Task<IActionResult> OnGet(int id)
         {
-            MemberToUpdate = await _repo.SearchMember(id);
+            try
+            {
+                MemberToUpdate = await _repo.SearchMember(id);
+            }
+            catch (MemberDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return Page();
         }
         public async Task<IActionResult> OnPostUpdate()
@@ -49,22 +63,52 @@ namespace RazorBoatApp2026InClass.Pages.Members
                     theImage = Constants.DefaultMemberImage;
                 }
             }
-            if(HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
+            try
             {
-                Message = "Du kan ikke ændre denne bruger";
+                if (HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
+                {
+                    Message = "Du kan ikke ændre denne bruger";
+                    return Page();
+                }
+                MemberToUpdate.Image = theImage;
+                MemberToUpdate.Password = HttpContext.Session.GetString("Password")!;
+                await _repo.UpdateMember(MemberToUpdate);
+            }
+            catch (MemberDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
                 return Page();
             }
-            MemberToUpdate.Image = theImage;
-            MemberToUpdate.Password = HttpContext.Session.GetString("Password")!;
-            await _repo.UpdateMember(MemberToUpdate);
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return RedirectToPage("index");
+            //MemberToUpdate.Image = theImage;
+            //MemberToUpdate.Password = HttpContext.Session.GetString("Password")!;
+            //await _repo.UpdateMember(MemberToUpdate);
+            //return RedirectToPage("index");
             
         }
         public IActionResult OnPostDelete()
         {
-            if (HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
+            try
             {
-                Message = "Du kan ikke Slette denne bruger";
+                if (HttpContext.Session.GetInt32("ID") != MemberToUpdate.Id && (MemberRole)HttpContext.Session.GetInt32("MemberRole")! != MemberRole.Admin)
+                {
+                    Message = "Du kan ikke Slette denne bruger";
+                    return Page();
+                }
+            }
+            catch (MemberDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
                 return Page();
             }
             return RedirectToPage("DeleteMember");

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -31,21 +32,54 @@ namespace RazorBoatApp2026InClass.Pages.Bookings
             _bRepo = bRepo;
             _mRepo = mRepo;
         }
-        public async Task OnGet(int boatId)
+        /// Tidligere ikke IActionResult
+        public async Task<IActionResult> OnGet(int boatId)
         {
-            ChosenBoat = await _bRepo.SearchBoat(boatId);
-            BoatId = BoatId;
+            try
+            {
+                ChosenBoat = await _bRepo.SearchBoat(boatId);
+                BoatId = BoatId;
+            }
+            catch (BoatDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
+            return Page();
+            //ChosenBoat = await _bRepo.SearchBoat(boatId);
+            //BoatId = BoatId;
         }
 
         public async Task<IActionResult> OnPost()
         {
-
-            TheBooking.TheMember = await _mRepo.SearchMember(MemberId);
-            //TheBooking.TheMember = _mRepo.SearchMember(PhoneNumber);
-            TheBooking.TheBoat = await _bRepo.SearchBoat(BoatId);
-            TheBooking.StartDate = StartDate;
-            TheBooking.EndDate = EndDate;
-            await _repo.AddBooking(TheBooking);
+            try
+            {
+                TheBooking.TheMember = await _mRepo.SearchMember(MemberId);
+                TheBooking.TheBoat = await _bRepo.SearchBoat(BoatId);
+                TheBooking.StartDate = StartDate;
+                TheBooking.EndDate = EndDate;
+                await _repo.AddBooking(TheBooking);
+            }
+            catch (MemberDoesntExistsException mEx)
+            {
+                ViewData["ErrorMessage"] = mEx.Message;
+                return Page();
+            }
+            catch (BoatDoesntExistsException bEx)
+            {
+                ViewData["ErrorMessage"] = bEx.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return RedirectToPage("Index");
         }
     }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -18,38 +19,64 @@ namespace RazorBoatApp2026InClass.Pages.Members
 
         public async Task<IActionResult> OnGet(int id)
         {
-            DeleteMember = await _repo.SearchMember(id);
+            try
+            {
+                DeleteMember = await _repo.SearchMember(id);
+            }
+            catch (MemberDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return Page();
         }
         public async Task<IActionResult> OnPostDelete(int id)
         {
-            Member? m = await _repo.SearchMember(id);
-            if(m != null)
+            try
             {
-                int? sessionID = HttpContext.Session.GetInt32("ID");
-                int? sessionRoleValue = HttpContext.Session.GetInt32("MemberRole");
-                bool isAdmin = sessionRoleValue.HasValue && (MemberRole)sessionRoleValue == MemberRole.Admin;
-                if (!sessionID.HasValue)
+                Member? m = await _repo.SearchMember(id);
+                if (m != null)
                 {
-                    Message = "For at slette skal du logge ind";
-                    return Page();
+                    int? sessionID = HttpContext.Session.GetInt32("ID");
+                    int? sessionRoleValue = HttpContext.Session.GetInt32("MemberRole");
+                    bool isAdmin = sessionRoleValue.HasValue && (MemberRole)sessionRoleValue == MemberRole.Admin;
+                    if (!sessionID.HasValue)
+                    {
+                        Message = "For at slette skal du logge ind";
+                        return Page();
+                    }
+                    else if (sessionID == m.Id)
+                    {
+                        await _repo.RemoveMember(m);
+                        HttpContext.Session.Clear();
+                        return RedirectToPage("index");
+                    }
+                    else
+                    {
+                        Message = "Du kan ikke slette denne bruger";
+                        DeleteMember = m;
+                        return RedirectToPage("index");
+                    }
+
                 }
-                else if (sessionID == m.Id)
-                {
-                    await _repo.RemoveMember(m);
-                    HttpContext.Session.Clear();
-                    return RedirectToPage("index");
-                }
-                else
-                {
-                    Message = "Du kan ikke slette denne bruger";
-                    DeleteMember = m;
-                    return RedirectToPage("index");
-                }
-                
+                Message = "Brugeren kunne ikke findes";
+                return Page();
             }
-            Message = "Brugeren kunne ikke findes";
-            return Page();
+            catch (MemberDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
         }
         public IActionResult OnPost()
         {

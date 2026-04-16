@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorBoatApp2026InClass.Helpers;
+using SailClubLibrary.Exceptions;
 using SailClubLibrary.Interfaces;
 using SailClubLibrary.Models;
 
@@ -19,9 +20,23 @@ namespace RazorBoatApp2026InClass.Pages.Boats
             _repo = repo;
             _webHostEnvironment = webHost;
         }
-        public async Task OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
-            BoatToUpdate = await _repo.SearchBoat(id);
+            try
+            {
+                BoatToUpdate = await _repo.SearchBoat(id);
+            }
+            catch (BoatDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostUpdate()
@@ -45,7 +60,20 @@ namespace RazorBoatApp2026InClass.Pages.Boats
                 }
             }
             BoatToUpdate.Image = theImage;
-            await _repo.UpdateBoat(BoatToUpdate);
+            try
+            {
+                await _repo.UpdateBoat(BoatToUpdate);
+            }
+            catch (BoatDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return RedirectToPage("Index");
         }
         //public async Task<IActionResult> OnPostUpdate()
@@ -55,7 +83,20 @@ namespace RazorBoatApp2026InClass.Pages.Boats
         //}
         public async Task<IActionResult> OnPostDelete()
         {
-            await _repo.RemoveBoat(BoatToUpdate.Id);
+            try
+            {
+                await _repo.RemoveBoat(BoatToUpdate.Id);
+            }
+            catch (BoatDoesntExistsException ex)
+            {
+                ViewData["ErrorMessage"] = ex.Message;
+                return Page();
+            }
+            catch (Exception exp)
+            {
+                ViewData["ErrorMessage"] = exp.Message;
+                return Page();
+            }
             return RedirectToPage("Index");
         }
     }

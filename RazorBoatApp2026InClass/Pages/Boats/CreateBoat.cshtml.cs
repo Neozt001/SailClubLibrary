@@ -51,7 +51,7 @@ namespace RazorBoatApp2026InClass.Pages.Boats
             {
                 await _repo.AddBoat(NewBoat);
             }
-            catch (BoatSailnumberExistsException ex)
+            catch (BoatDoesntExistsException ex)
             {
                 ViewData["ErrorMessage"] = ex.Message;
                 return Page();

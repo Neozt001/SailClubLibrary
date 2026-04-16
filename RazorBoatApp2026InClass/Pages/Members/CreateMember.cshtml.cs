@@ -39,12 +39,10 @@ namespace RazorBoatApp2026InClass.Pages.Members
                     string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images/MemberBoatImages", NewMember.Image);
                     System.IO.File.Delete(filePath);
                 }
-                //NewMember.Image = ProcessUploadedFile();
                 NewMember.Image = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath,  Constants.DefaultMemberImage);
             }
             else
             {
-                //NewMember.Image = ProcessUploadedFile();
                 NewMember.Image = ProcessImage.ProcessUploadedFile(Photo, _webHostEnvironment.WebRootPath, Constants.DefaultMemberImage);
             }
             try
@@ -52,7 +50,7 @@ namespace RazorBoatApp2026InClass.Pages.Members
 
                 await _repo.AddMember(NewMember);
             }
-            catch (MemberPhoneNumberExistsException mEx)
+            catch (MemberDoesntExistsException mEx)
             {
                 ViewData["ErrorMessage"] = mEx.Message;
                 return Page();
@@ -64,28 +62,5 @@ namespace RazorBoatApp2026InClass.Pages.Members
             }
             return RedirectToPage("index");
         }
-            //private string ProcessUploadedFile()
-            //{
-            //    string uniqueFileName = null;
-            //    if (Photo != null)
-            //    {
-            //        string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/MemberImages");
-            //        if (!Directory.Exists(uploadsFolder))
-            //        {
-            //            Directory.CreateDirectory(uploadsFolder);
-            //        }
-            //        uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-            //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            //        using (var fileStream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            Photo.CopyTo(fileStream);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        return "Default.jpg";
-            //    }
-            //    return uniqueFileName;
-            //}
     }
 }
